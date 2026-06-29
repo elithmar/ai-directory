@@ -15,6 +15,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <header className="header">
+          <div className="container header-container">
+            <Link href="/" className="logo-link">
+              <img src="/logo.png" alt="AI Directory Logo" className="logo-image" />
+              <span className="logo-text">AI Directory</span>
+            </Link>
+          </div>
+        </header>
         {children}
         <footer className="footer">
           <div className="container">
