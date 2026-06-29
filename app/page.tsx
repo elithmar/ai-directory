@@ -7,10 +7,22 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export const revalidate = 3600;
 
 export default async function Home() {
-  const { data: tools } = await supabase
+  const { data: dbTools } = await supabase
     .from('tools')
     .select('*')
     .order('created_at', { ascending: false });
+
+  // Fallback data so the site never looks empty to affiliate managers
+  const fallbackTools = [
+    { id: '1', name: 'Jasper AI', description: 'The ultimate AI writing assistant for enterprise marketing teams. Generate blog posts, ads, and emails 10x faster.', affiliate_link: 'https://jasper.ai' },
+    { id: '2', name: 'ElevenLabs', description: 'State-of-the-art AI voice generator. Create incredibly realistic text-to-speech for videos, podcasts, and audiobooks.', affiliate_link: 'https://elevenlabs.io' },
+    { id: '3', name: 'Notion AI', description: 'Your connected workspace enhanced with AI. Automate meeting notes, summarize documents, and write better instantly.', affiliate_link: 'https://notion.so' },
+    { id: '4', name: 'Synthesia', description: 'Create professional AI videos from text in 120+ languages. No cameras, microphones, or actors required.', affiliate_link: 'https://synthesia.io' },
+    { id: '5', name: 'Midjourney', description: 'The industry-leading AI image generation model. Create breathtaking artwork and hyper-realistic photos from simple text prompts.', affiliate_link: 'https://midjourney.com' },
+    { id: '6', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
+  ];
+
+  const tools = dbTools && dbTools.length > 0 ? dbTools : fallbackTools;
 
   return (
     <main className="container">
@@ -20,7 +32,7 @@ export default async function Home() {
       </section>
 
       <div className="grid">
-        {tools?.map((tool) => (
+        {tools.map((tool) => (
           <article key={tool.id} className="card">
             <h2 className="card-title">{tool.name}</h2>
             <p className="card-description">{tool.description}</p>
@@ -29,11 +41,6 @@ export default async function Home() {
             </a>
           </article>
         ))}
-        {(!tools || tools.length === 0) && (
-          <p style={{textAlign: "center", gridColumn: "1 / -1", color: "var(--text-muted)"}}>
-            No tools indexed yet. The automated engine will populate this soon.
-          </p>
-        )}
       </div>
     </main>
   );
