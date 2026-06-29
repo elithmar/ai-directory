@@ -18,6 +18,11 @@ export default function CookieBanner() {
     setShowBanner(false);
   };
 
+  const declineCookies = () => {
+    localStorage.setItem('cookie-consent', 'false');
+    setShowBanner(false);
+  };
+
   if (!showBanner) return null;
 
   return (
@@ -27,7 +32,10 @@ export default function CookieBanner() {
           We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. 
           By clicking "Accept All", you consent to our use of cookies as described in our <Link href="/privacy" className="cookie-link">Privacy Policy</Link>.
         </p>
-        <button onClick={acceptCookies} className="cookie-button">Accept All</button>
+        <div className="cookie-buttons">
+          <button onClick={declineCookies} className="cookie-button-secondary">Decline</button>
+          <button onClick={acceptCookies} className="cookie-button">Accept All</button>
+        </div>
       </div>
     </div>
   );
