@@ -5,6 +5,9 @@ import CookieBanner from '@/components/CookieBanner';
 export const metadata = {
   title: 'AI Tool Directory',
   description: 'The best AI tools curated for your productivity.',
+  verification: {
+    google: 'KS6zsRTrR-a3hM_2NJgjnwg7pBPsl0JfVAP882Z_72s',
+  },
 };
 
 export default function RootLayout({
