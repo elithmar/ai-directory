@@ -17,7 +17,7 @@ export default async function Home() {
       <section className="hero">
         <h1>Automated AI Directory</h1>
         <p>Discover the latest high-leverage AI tools. Curated programmatically.</p>
-        <p>Impact-Site-Verification: 0c938605-2923-4cfc-8d09-3010cd195015</p>
+        <p>Impact-Site-Verification: a13883f9-8ed7-47ef-8888-daa25a189851</p>
       </section>
 
       <div className="grid">
