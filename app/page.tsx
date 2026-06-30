@@ -22,7 +22,7 @@ export default async function Home() {
     { id: '6', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
   ];
 
-  const tools = dbTools && dbTools.length > 0 ? dbTools : fallbackTools;
+  const tools = dbTools && dbTools.length > 0 ? [...dbTools, ...fallbackTools] : fallbackTools;
 
   return (
     <main className="container">
