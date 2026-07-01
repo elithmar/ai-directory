@@ -22,10 +22,7 @@ export default async function Home() {
     { id: '6', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
   ];
 
-  // Filter out simulated tools so affiliate managers don't reject the site
-  const realDbTools = dbTools ? dbTools.filter((t: any) => !t.name.startsWith('AI Tool')) : [];
-  
-  const tools = realDbTools.length > 0 ? [...realDbTools, ...fallbackTools] : fallbackTools;
+  const tools = dbTools && dbTools.length > 0 ? [...dbTools, ...fallbackTools] : fallbackTools;
 
   return (
     <main className="container">
