@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 
     // 2. Conectar con Gemini
     const genAI = new GoogleGenerativeAI(geminiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `
       You are an expert AI curator for a B2B SaaS directory.
