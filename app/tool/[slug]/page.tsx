@@ -7,15 +7,38 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const fallbackTools = [
+  { id: '1', slug: 'jasper-ai', category: 'Marketing', name: 'Jasper AI', description: 'The ultimate AI writing assistant for enterprise marketing teams. Generate blog posts, ads, and emails 10x faster.', affiliate_link: 'https://jasper.ai' },
+  { id: '2', slug: 'elevenlabs', category: 'Audio', name: 'ElevenLabs', description: 'State-of-the-art AI voice generator. Create incredibly realistic text-to-speech for videos, podcasts, and audiobooks.', affiliate_link: 'https://elevenlabs.io' },
+  { id: '3', slug: 'notion-ai', category: 'Productivity', name: 'Notion AI', description: 'Your connected workspace enhanced with AI. Automate meeting notes, summarize documents, and write better instantly.', affiliate_link: 'https://notion.so' },
+  { id: '4', slug: 'synthesia', category: 'Video', name: 'Synthesia', description: 'Create professional AI videos from text in 120+ languages. No cameras, microphones, or actors required.', affiliate_link: 'https://synthesia.io' },
+  { id: '5', slug: 'midjourney', category: 'Design', name: 'Midjourney', description: 'The industry-leading AI image generation model. Create breathtaking artwork and hyper-realistic photos from simple text prompts.', affiliate_link: 'https://midjourney.com' },
+  { id: '6', slug: 'grammarlygo', category: 'Productivity', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
+];
+
 export default async function ToolPage({ params }: { params: { slug: string } }) {
-  // Query tool by slug
+  // 1. Try to find in database by exact slug
   const { data: tools } = await supabase
     .from('tools')
     .select('*')
     .eq('slug', params.slug)
     .limit(1);
 
-  const tool = tools?.[0];
+  let tool = tools?.[0];
+
+  // 2. If not found by slug, maybe it's an older DB entry missing a slug?
+  // We fetch all and find it by formatting the name
+  if (!tool) {
+    const { data: allTools } = await supabase.from('tools').select('*');
+    if (allTools) {
+      tool = allTools.find(t => t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+    }
+  }
+
+  // 3. Try to find in fallback tools
+  if (!tool) {
+    tool = fallbackTools.find(t => t.slug === params.slug);
+  }
 
   if (!tool) {
     return (
