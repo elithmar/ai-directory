@@ -32,7 +32,15 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
     { id: '6', slug: 'grammarlygo', category: 'Productivity', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
   ];
 
-  const tools = dbTools && dbTools.length > 0 ? dbTools : fallbackTools;
+  let filteredFallback = fallbackTools;
+  if (searchParams.q) {
+    filteredFallback = filteredFallback.filter(t => t.name.toLowerCase().includes(searchParams.q!.toLowerCase()));
+  }
+  if (searchParams.category) {
+    filteredFallback = filteredFallback.filter(t => t.category === searchParams.category);
+  }
+
+  const tools = dbTools && dbTools.length > 0 ? [...dbTools, ...filteredFallback] : filteredFallback;
   const featuredTool = tools[0];
 
   return (
