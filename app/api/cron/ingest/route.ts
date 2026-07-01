@@ -41,6 +41,11 @@ export async function GET(request: Request) {
       - "category": A single category word (e.g., "Video", "Text", "Audio", "Marketing", "Productivity", "Design").
       - "description": A compelling, 2-sentence SEO-optimized description explaining the core value proposition.
       - "affiliate_link": The direct URL to their official website (e.g., https://example.com).
+      - "review_data": A nested JSON object containing:
+          - "features": Array of 3 strings detailing key features.
+          - "pros": Array of 3 strings.
+          - "cons": Array of 2 strings.
+          - "pricing": A short string summarizing pricing (e.g. "Freemium, starts at $15/mo").
     `;
 
     const result = await model.generateContent(prompt);

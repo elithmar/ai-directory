@@ -17,7 +17,6 @@ const fallbackTools = [
 ];
 
 export default async function ToolPage({ params }: { params: { slug: string } }) {
-  // 1. Try to find in database by exact slug
   const { data: tools } = await supabase
     .from('tools')
     .select('*')
@@ -26,8 +25,6 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
   let tool = tools?.[0];
 
-  // 2. If not found by slug, maybe it's an older DB entry missing a slug?
-  // We fetch all and find it by formatting the name
   if (!tool) {
     const { data: allTools } = await supabase.from('tools').select('*');
     if (allTools) {
@@ -35,7 +32,6 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     }
   }
 
-  // 3. Try to find in fallback tools
   if (!tool) {
     tool = fallbackTools.find(t => t.slug === params.slug);
   }
@@ -49,6 +45,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     );
   }
 
+  const review = tool.review_data || null;
+
   return (
     <main className="container">
       <div style={{ marginBottom: '2rem' }}>
@@ -56,30 +54,77 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       </div>
       
       <article className="tool-detail">
-        <span style={{ 
-          display: 'inline-block',
-          background: 'var(--accent)', 
-          color: '#fff', 
-          padding: '4px 12px', 
-          borderRadius: '20px', 
-          fontSize: '0.9rem',
-          marginBottom: '1rem',
-          fontWeight: 'bold'
-        }}>
-          {tool.category || 'AI Tool'}
-        </span>
-        
-        <h1 style={{ fontSize: '3rem', marginBottom: '1rem', background: 'linear-gradient(45deg, #fff, #888)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          {tool.name}
-        </h1>
-        
-        <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', marginBottom: '2rem' }}>
-          <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#ccc' }}>
+        <header style={{ marginBottom: '3rem' }}>
+          <span style={{ 
+            display: 'inline-block',
+            background: 'var(--accent)', 
+            color: '#fff', 
+            padding: '6px 16px', 
+            borderRadius: '20px', 
+            fontSize: '0.9rem',
+            marginBottom: '1rem',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            {tool.category || 'AI Tool'}
+          </span>
+          
+          <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', background: 'linear-gradient(45deg, #fff, #aaa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-1px' }}>
+            {tool.name} Review
+          </h1>
+          
+          <p style={{ fontSize: '1.4rem', lineHeight: '1.8', color: '#ddd', maxWidth: '800px' }}>
             {tool.description}
           </p>
-        </div>
+        </header>
+        
+        {/* Deep Review Section */}
+        {review && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+            
+            {/* Features */}
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '16px' }}>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#fff' }}>✨ Key Features</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {review.features?.map((feat: string, i: number) => (
+                  <li key={i} style={{ marginBottom: '1rem', color: '#bbb', paddingLeft: '1.5rem', position: 'relative' }}>
+                    <span style={{ position: 'absolute', left: 0, color: 'var(--accent)' }}>•</span>
+                    {feat}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
+            {/* Pros & Cons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '2rem', borderRadius: '16px' }}>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#10b981' }}>👍 Pros</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {review.pros?.map((pro: string, i: number) => (
+                    <li key={i} style={{ marginBottom: '0.8rem', color: '#bbb' }}>✓ {pro}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '2rem', borderRadius: '16px' }}>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ef4444' }}>👎 Cons</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {review.cons?.map((con: string, i: number) => (
+                    <li key={i} style={{ marginBottom: '0.8rem', color: '#bbb' }}>✕ {con}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+          </div>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem', background: 'rgba(0,0,0,0.3)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <div>
+            <span style={{ display: 'block', fontSize: '0.9rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Pricing</span>
+            <strong style={{ fontSize: '1.5rem', color: '#fff' }}>{review?.pricing || 'Visit website for pricing'}</strong>
+          </div>
           <a 
             href={tool.affiliate_link} 
             target="_blank" 
@@ -88,15 +133,16 @@ export default async function ToolPage({ params }: { params: { slug: string } })
               display: 'inline-block',
               background: 'linear-gradient(45deg, var(--accent), #10b981)',
               color: 'var(--bg)',
-              padding: '16px 32px',
-              borderRadius: '8px',
+              padding: '20px 40px',
+              borderRadius: '12px',
               textDecoration: 'none',
               fontWeight: 'bold',
-              fontSize: '1.1rem',
+              fontSize: '1.2rem',
               transition: 'transform 0.2s ease',
+              marginLeft: 'auto'
             }}
           >
-            Try {tool.name} Now
+            Go to {tool.name} &rarr;
           </a>
         </div>
       </article>

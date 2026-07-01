@@ -89,7 +89,7 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
 
       {/* Grid */}
       <div className="grid">
-        {tools.map((tool) => (
+        {(searchParams.q || searchParams.category ? tools : tools.slice(1)).map((tool) => (
           <article key={tool.id || tool.name} className="card">
             {tool.category && <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '1px' }}>{tool.category}</span>}
             <h2 className="card-title" style={{ marginTop: '0.5rem' }}>{tool.name}</h2>
