@@ -37,6 +37,8 @@ export async function GET(request: Request) {
       Suggest ONE high-quality, real AI tool that is NOT in the list above.
       Provide the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
       - "name": The official name of the tool.
+      - "slug": A URL-friendly version of the name (e.g., "heygen", "jasper-ai").
+      - "category": A single category word (e.g., "Video", "Text", "Audio", "Marketing", "Productivity", "Design").
       - "description": A compelling, 2-sentence SEO-optimized description explaining the core value proposition.
       - "affiliate_link": The direct URL to their official website (e.g., https://example.com).
     `;
