@@ -66,15 +66,15 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         {/* Categories */}
         <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           {['Video', 'Audio', 'Marketing', 'Productivity', 'Design'].map(cat => (
-            <Link key={cat} href={`/?category=${cat}`} style={{
+            <a key={cat} href={`/?category=${cat}`} style={{
               padding: '6px 12px', borderRadius: '20px', fontSize: '0.8rem', textDecoration: 'none',
               background: searchParams.category === cat ? 'var(--accent)' : 'rgba(255,255,255,0.1)',
               color: '#fff'
             }}>
               {cat}
-            </Link>
+            </a>
           ))}
-          {searchParams.category && <Link href="/" style={{ padding: '6px 12px', fontSize: '0.8rem', color: '#888' }}>Clear</Link>}
+          {searchParams.category && <a href="/" style={{ padding: '6px 12px', fontSize: '0.8rem', color: '#888', textDecoration: 'none' }}>Clear</a>}
         </div>
       </section>
 

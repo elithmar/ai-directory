@@ -20,10 +20,10 @@ export default function RootLayout({
       <body>
         <header className="header">
           <div className="container header-container">
-            <Link href="/" className="logo-link">
+            <a href="/" className="logo-link">
               <img src="/logo.png" alt="AI Directory Logo" className="logo-image" />
               <span className="logo-text">AI Directory</span>
-            </Link>
+            </a>
           </div>
         </header>
         {children}
