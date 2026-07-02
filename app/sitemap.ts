@@ -31,14 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // 2. Dynamic Tool and Guide Pages (from DB)
-  const { data: tools } = await supabase.from('tools').select('slug, updated_at');
+  const { data: tools } = await supabase.from('tools').select('slug, created_at');
   const { data: guides } = await supabase.from('guides').select('slug, created_at');
   
   const toolPages: MetadataRoute.Sitemap = (tools || [])
     .filter(t => t.slug)
     .map((tool) => ({
       url: `${baseUrl}/tool/${tool.slug}`,
-      lastModified: new Date(tool.updated_at || new Date()),
+      lastModified: new Date(tool.created_at || new Date()),
       changeFrequency: 'weekly',
       priority: 0.8,
     }));

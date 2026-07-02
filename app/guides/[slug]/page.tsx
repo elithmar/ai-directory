@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   // Generate a short description from the first 150 chars of content
-  const desc = guide.content.substring(0, 150).replace(/#|\*/g, '').trim() + '...';
+  const desc = (guide.content || '').substring(0, 150).replace(/#|\*/g, '').trim() + '...';
 
   return {
     title: `${guide.title} | Curated AI List`,
