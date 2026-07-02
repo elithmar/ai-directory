@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
   return (
     <main className="container">
       <section className="hero">
-        <h1>Automated AI Directory</h1>
+        <h1>Curated AI List</h1>
         <p>Discover the latest high-leverage AI tools. Curated programmatically.</p>
         
         {/* Simple Search Form */}

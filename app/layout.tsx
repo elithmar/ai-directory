@@ -3,7 +3,7 @@ import Link from 'next/link';
 import CookieBanner from '@/components/CookieBanner';
 
 export const metadata = {
-  title: 'AI Tool Directory',
+  title: 'Curated AI List',
   description: 'The best AI tools curated for your productivity.',
   verification: {
     google: 'KS6zsRTrR-a3hM_2NJgjnwg7pBPsl0JfVAP882Z_72s',
@@ -21,15 +21,15 @@ export default function RootLayout({
         <header className="header">
           <div className="container header-container">
             <a href="/" className="logo-link">
-              <img src="/logo.png" alt="AI Directory Logo" className="logo-image" />
-              <span className="logo-text">AI Directory</span>
+              <img src="/logo.png" alt="Curated AI List Logo" className="logo-image" />
+              <span className="logo-text">Curated AI List</span>
             </a>
           </div>
         </header>
         {children}
         <footer className="footer">
           <div className="container">
-            <p>&copy; {new Date().getFullYear()} AI Directory. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Curated AI List. All rights reserved.</p>
             <div className="footer-links">
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/terms">Terms of Service</Link>
