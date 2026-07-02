@@ -159,7 +159,6 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
                 padding: '8px 16px', 
                 borderRadius: '20px', 
                 fontSize: '0.85rem',
-                border: 'none',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 background: isSelected ? 'var(--accent)' : (isHighlighted ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.05)'),
