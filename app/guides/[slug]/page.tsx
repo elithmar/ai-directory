@@ -56,7 +56,7 @@ function parseMarkdownToHTML(markdown: string) {
   html = html.split('\n').map(line => {
     line = line.trim();
     if (line.length > 0 && !line.startsWith('<')) {
-      return `<p style="margin-bottom: 1.5rem; color: #ccc; line-height: 1.8; font-size: 1.1rem;">${line}</p>`;
+      return `<p style="margin-bottom: 1.75rem; color: #cbd5e1; line-height: 2; font-size: 1.15rem; font-weight: 300;">${line}</p>`;
     }
     return line;
   }).join('\n');
@@ -103,9 +103,22 @@ export default async function GuidePage({ params }: { params: { slug: string } }
         {/* Render the markdown as HTML */}
         <div 
           className="markdown-content" 
-          style={{ paddingBottom: '5rem' }}
+          style={{ paddingBottom: '3rem' }}
           dangerouslySetInnerHTML={{ __html: htmlContent }} 
         />
+
+        {/* Copyright & Source Disclaimer */}
+        <div style={{ 
+          marginTop: '2rem',
+          padding: '1.5rem', 
+          background: 'rgba(255,255,255,0.03)', 
+          borderLeft: '4px solid var(--primary)', 
+          borderRadius: '0 8px 8px 0',
+          fontSize: '0.95rem',
+          color: '#94a3b8'
+        }}>
+          <strong>Disclaimer:</strong> This guide was generated programmatically by AI and curated by humans. It is free from traditional human copyright restrictions. You are free to share and utilize this knowledge.
+        </div>
         
       </article>
     </main>

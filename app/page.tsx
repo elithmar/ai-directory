@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import SearchAndFilter from './components/SearchAndFilter';
 
 export const revalidate = 0;
 
@@ -32,33 +33,8 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         <h1>Curated AI List</h1>
         <p>Discover the latest high-leverage AI tools. Curated programmatically.</p>
         
-        {/* Simple Search Form */}
-        <form style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <input 
-            type="text" 
-            name="q" 
-            placeholder="Search AI tools..." 
-            defaultValue={searchParams.q}
-            style={{ padding: '12px 24px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: '#fff', width: '300px' }}
-          />
-          <button type="submit" style={{ padding: '12px 24px', borderRadius: '30px', background: 'var(--accent)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
-            Search
-          </button>
-        </form>
-        
-        {/* Categories */}
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {['Video', 'Audio', 'Marketing', 'Productivity', 'Design'].map(cat => (
-            <a key={cat} href={`/?category=${cat}`} style={{
-              padding: '6px 12px', borderRadius: '20px', fontSize: '0.8rem', textDecoration: 'none',
-              background: searchParams.category === cat ? 'var(--accent)' : 'rgba(255,255,255,0.1)',
-              color: '#fff'
-            }}>
-              {cat}
-            </a>
-          ))}
-          {searchParams.category && <a href="/" style={{ padding: '6px 12px', fontSize: '0.8rem', color: '#888', textDecoration: 'none' }}>Clear</a>}
-        </div>
+        {/* Interactive Search & Filter Client Component */}
+        <SearchAndFilter tools={dbTools || []} initialQuery={searchParams.q} initialCategory={searchParams.category} />
       </section>
 
       {/* Featured Section */}

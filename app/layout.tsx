@@ -26,6 +26,7 @@ export default function RootLayout({
             </a>
             <nav style={{ display: 'flex', gap: '1.5rem' }}>
               <Link href="/guides" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>Guides</Link>
+              <Link href="/about" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>About</Link>
             </nav>
           </div>
         </header>
