@@ -23,24 +23,7 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
 
   const { data: dbTools } = await query;
 
-  const fallbackTools = [
-    { id: '1', slug: 'jasper-ai', category: 'Marketing', name: 'Jasper AI', description: 'The ultimate AI writing assistant for enterprise marketing teams. Generate blog posts, ads, and emails 10x faster.', affiliate_link: 'https://jasper.ai' },
-    { id: '2', slug: 'elevenlabs', category: 'Audio', name: 'ElevenLabs', description: 'State-of-the-art AI voice generator. Create incredibly realistic text-to-speech for videos, podcasts, and audiobooks.', affiliate_link: 'https://elevenlabs.io' },
-    { id: '3', slug: 'notion-ai', category: 'Productivity', name: 'Notion AI', description: 'Your connected workspace enhanced with AI. Automate meeting notes, summarize documents, and write better instantly.', affiliate_link: 'https://notion.so' },
-    { id: '4', slug: 'synthesia', category: 'Video', name: 'Synthesia', description: 'Create professional AI videos from text in 120+ languages. No cameras, microphones, or actors required.', affiliate_link: 'https://synthesia.io' },
-    { id: '5', slug: 'midjourney', category: 'Design', name: 'Midjourney', description: 'The industry-leading AI image generation model. Create breathtaking artwork and hyper-realistic photos from simple text prompts.', affiliate_link: 'https://midjourney.com' },
-    { id: '6', slug: 'grammarlygo', category: 'Productivity', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
-  ];
-
-  let filteredFallback = fallbackTools;
-  if (searchParams.q) {
-    filteredFallback = filteredFallback.filter(t => t.name.toLowerCase().includes(searchParams.q!.toLowerCase()));
-  }
-  if (searchParams.category) {
-    filteredFallback = filteredFallback.filter(t => t.category === searchParams.category);
-  }
-
-  const tools = dbTools && dbTools.length > 0 ? [...dbTools, ...filteredFallback] : filteredFallback;
+  const tools = dbTools || [];
   const featuredTool = tools[0];
 
   return (
