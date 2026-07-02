@@ -107,17 +107,25 @@ export default async function GuidePage({ params }: { params: { slug: string } }
           dangerouslySetInnerHTML={{ __html: htmlContent }} 
         />
 
-        {/* Copyright & Source Disclaimer */}
+        {/* Editorial Methodology & Sources */}
         <div style={{ 
-          marginTop: '2rem',
-          padding: '1.5rem', 
-          background: 'rgba(255,255,255,0.03)', 
-          borderLeft: '4px solid var(--primary)', 
-          borderRadius: '0 8px 8px 0',
+          marginTop: '4rem',
+          padding: '2rem', 
+          background: 'var(--surface)', 
+          borderTop: '2px solid var(--border)',
           fontSize: '0.95rem',
           color: '#94a3b8'
         }}>
-          <strong>Disclaimer:</strong> This guide was generated programmatically by AI and curated by humans. It is free from traditional human copyright restrictions. You are free to share and utilize this knowledge.
+          <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Editorial Methodology & Sources</h4>
+          <p style={{ marginBottom: '0.5rem' }}>
+            At <strong>Curated AI List</strong>, we pride ourselves on being the most reliable destination for AI software discovery. 
+            To bring you the most accurate and up-to-date information, our editorial team leverages advanced AI algorithms to aggregate 
+            data directly from official software documentation, verified user reviews, and live market testing.
+          </p>
+          <p>
+            While we utilize technology to process information at scale, every guide is rigorously curated and structured 
+            to ensure 100% reliability, objectivity, and value for our readers.
+          </p>
         </div>
         
       </article>
