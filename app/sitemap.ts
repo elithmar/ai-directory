@@ -17,16 +17,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/privacy`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/terms`,
+      url: `${baseUrl}/guides`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
+      changeFrequency: 'daily',
+      priority: 0.8,
     }
   ];
 
@@ -52,17 +52,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-  // 3. Fallback tools
-  const fallbackTools = [
-    'jasper-ai', 'elevenlabs', 'notion-ai', 'synthesia', 'midjourney', 'grammarlygo'
-  ];
-  
-  const fallbackPages: MetadataRoute.Sitemap = fallbackTools.map(slug => ({
-    url: `${baseUrl}/tool/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
-
-  return [...staticPages, ...toolPages, ...guidePages, ...fallbackPages];
+  return [...staticPages, ...toolPages, ...guidePages];
 }

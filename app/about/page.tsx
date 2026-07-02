@@ -28,6 +28,10 @@ export default function AboutPage() {
           <h3 style={{ color: '#fff', marginBottom: '1rem' }}>Want to stay ahead of the curve?</h3>
           <p style={{ fontSize: '1rem' }}>Check back every week as our autonomous systems discover and review the latest tools.</p>
         </div>
+
+        <div style={{ textAlign: 'center', fontStyle: 'italic', color: 'var(--primary)', fontWeight: '500', fontSize: '1.2rem', marginTop: '4rem' }}>
+          — The Curated AI List Team
+        </div>
       </div>
     </main>
   );

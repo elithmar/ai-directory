@@ -107,6 +107,10 @@ export default async function GuidePage({ params }: { params: { slug: string } }
           dangerouslySetInnerHTML={{ __html: htmlContent }} 
         />
 
+        <div style={{ textAlign: 'right', fontStyle: 'italic', color: 'var(--primary)', fontWeight: '500', fontSize: '1.1rem', marginTop: '1rem' }}>
+          — The Curated AI List Team
+        </div>
+
         {/* Editorial Methodology & Sources */}
         <div style={{ 
           marginTop: '4rem',
