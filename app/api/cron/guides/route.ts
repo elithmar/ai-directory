@@ -1,12 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function GET(request: Request) {
   // Security check for Vercel Cron
@@ -18,7 +15,28 @@ export async function GET(request: Request) {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const apiKey = process.env.GEMINI_API_KEY || '';
+    
+    // 1. Fetch available models to find one that works for her specific key
+    const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    const modelsData = await modelsRes.json();
+    
+    if (!modelsRes.ok) {
+        throw new Error(`Failed to list models: ${JSON.stringify(modelsData)}`);
+    }
+
+    // Find the first model that supports generateContent
+    let selectedModel = 'models/gemini-1.5-flash';
+    if (modelsData.models && modelsData.models.length > 0) {
+        const supportedModels = modelsData.models.filter((m: any) => 
+            m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent')
+        );
+        
+        const flashModel = supportedModels.find((m: any) => m.name.includes('gemini-1.5-flash'));
+        const proModel = supportedModels.find((m: any) => m.name.includes('gemini-pro'));
+        
+        selectedModel = flashModel?.name || proModel?.name || supportedModels[0]?.name || 'models/gemini-1.5-flash';
+    }
 
     const prompt = `
       You are an expert SEO copywriter and AI strategist for a website called "Curated AI List".
@@ -30,13 +48,32 @@ export async function GET(request: Request) {
       - "content": The full body of the article written in Markdown format (use ## for subheaders, * for bullet points). Ensure the content is deep, valuable, and well-structured.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    // 2. Generate content using raw fetch to avoid any SDK version issues
+    const generateRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${selectedModel}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7 }
+        })
+    });
+    
+    const generateData = await generateRes.json();
+    
+    if (!generateRes.ok) {
+        throw new Error(`Generation failed with model ${selectedModel}: ${JSON.stringify(generateData)}`);
+    }
+
+    const text = generateData.candidates?.[0]?.content?.parts?.[0]?.text || '';
     
     // Clean JSON parsing
     const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-    const data = JSON.parse(cleanedText);
+    let data;
+    try {
+        data = JSON.parse(cleanedText);
+    } catch (e) {
+        throw new Error(`Failed to parse AI response as JSON: ${cleanedText}`);
+    }
 
     // Insert into Supabase
     const { error } = await supabase
@@ -54,7 +91,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, guide: data.title });
+    return NextResponse.json({ success: true, guide: data.title, modelUsed: selectedModel });
   } catch (error: any) {
     console.error('Error generating guide:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
