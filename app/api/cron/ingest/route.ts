@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       {
         "name": "The official name of the tool",
         "slug": "url-friendly-slug",
-        "category": "A single category word",
+        "category": "MUST BE EXACTLY ONE OF THESE: Video, Audio, Marketing, Productivity, or Design. (Do not use any other word)",
         "description": "2-sentence SEO-optimized description",
         "affiliate_link": "URL",
         "review_data": {
