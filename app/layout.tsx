@@ -6,7 +6,7 @@ export const metadata = {
   title: 'Curated AI List',
   description: 'The best AI tools curated for your productivity.',
   verification: {
-    google: 'KS6zsRTrR-a3hM_2NJgjnwg7pBPsl0JfVAP882Z_72s',
+    google: 'Jn2zgXDFpuyvMj3nAWHc-zm4FKeNcrG0taK7zlEbjuU',
   },
 };
 
