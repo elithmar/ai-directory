@@ -50,7 +50,7 @@ function parseMarkdownToHTML(markdown: string) {
   // Lists
   html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
   html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>)/gis, '<ul style="margin-bottom: 1.5rem; padding-left: 1.5rem; color: #ccc; line-height: 1.8;">$1</ul>');
+  html = html.replace(/(<li>[\s\S]*<\/li>)/gi, '<ul style="margin-bottom: 1.5rem; padding-left: 1.5rem; color: #ccc; line-height: 1.8;">$1</ul>');
   
   // Paragraphs (Lines that don't start with a tag)
   html = html.split('\n').map(line => {
