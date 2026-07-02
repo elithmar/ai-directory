@@ -30,16 +30,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   ];
 
-  // 2. Dynamic Tool Pages (from DB)
-  const { data: tools } = await supabase.from('tools').select('slug, created_at');
+  // 2. Dynamic Tool and Guide Pages (from DB)
+  const { data: tools } = await supabase.from('tools').select('slug, updated_at');
+  const { data: guides } = await supabase.from('guides').select('slug, created_at');
   
-  const dynamicPages: MetadataRoute.Sitemap = (tools || [])
-    .filter(t => t.slug) // Avoid null slugs
+  const toolPages: MetadataRoute.Sitemap = (tools || [])
+    .filter(t => t.slug)
     .map((tool) => ({
       url: `${baseUrl}/tool/${tool.slug}`,
-      lastModified: new Date(tool.created_at || new Date()),
+      lastModified: new Date(tool.updated_at || new Date()),
       changeFrequency: 'weekly',
       priority: 0.8,
+    }));
+
+  const guidePages: MetadataRoute.Sitemap = (guides || [])
+    .filter(g => g.slug)
+    .map((guide) => ({
+      url: `${baseUrl}/guides/${guide.slug}`,
+      lastModified: new Date(guide.created_at || new Date()),
+      changeFrequency: 'monthly',
+      priority: 0.7,
     }));
 
   // 3. Fallback tools
@@ -54,5 +64,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...dynamicPages, ...fallbackPages];
+  return [...staticPages, ...toolPages, ...guidePages, ...fallbackPages];
 }

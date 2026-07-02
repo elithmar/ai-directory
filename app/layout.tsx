@@ -19,11 +19,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header className="header">
-          <div className="container header-container">
+          <div className="container header-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <a href="/" className="logo-link">
               <img src="/logo.png" alt="Curated AI List Logo" className="logo-image" />
               <span className="logo-text">Curated AI List</span>
             </a>
+            <nav style={{ display: 'flex', gap: '1.5rem' }}>
+              <Link href="/guides" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>Guides</Link>
+            </nav>
           </div>
         </header>
         {children}
