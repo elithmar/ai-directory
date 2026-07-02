@@ -24,6 +24,7 @@ export async function GET(request: Request) {
     const prompt = `
       You are an expert SEO copywriter and AI strategist for a website called "Curated AI List".
       Write a highly engaging, long-form SEO guide (around 500-800 words) about a trending topic in Artificial Intelligence (e.g., "Top 10 AI Tools for Marketing in 2026", or "How to automate your small business with AI").
+      CRITICAL INSTRUCTION: Make the content highly didactic, dynamic, and practical. For every tool or concept you mention, you MUST include a specific, real-world example of how it is used practically by businesses or individuals. Do not just describe what a tool does; explain *how* it is used in a specific scenario.
       
       Format the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
       {
