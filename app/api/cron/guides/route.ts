@@ -33,7 +33,25 @@ export async function GET(request: Request) {
       }
     `;
 
-    // 2. Generate content using Groq API
+    // 2. Fetch available models from Groq
+    const modelsRes = await fetch('https://api.groq.com/openai/v1/models', {
+        headers: { 'Authorization': `Bearer ${groqApiKey}` }
+    });
+    const modelsData = await modelsRes.json();
+    
+    let selectedModel = 'llama3-70b-8192'; // fallback
+    if (modelsRes.ok && modelsData.data) {
+        // Find the best available Llama model (preferring 70b or larger)
+        const availableModels = modelsData.data.map((m: any) => m.id);
+        const bestModel = availableModels.find((m: string) => m.includes('70b') && !m.includes('tool-use')) 
+            || availableModels.find((m: string) => m.includes('llama'))
+            || availableModels[0];
+        if (bestModel) {
+            selectedModel = bestModel;
+        }
+    }
+
+    // 3. Generate content using Groq API
     const generateRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 
@@ -41,7 +59,7 @@ export async function GET(request: Request) {
             'Authorization': `Bearer ${groqApiKey}`
         },
         body: JSON.stringify({
-            model: 'llama3-70b-8192',
+            model: selectedModel,
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.7,
             response_format: { type: 'json_object' }
