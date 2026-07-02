@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/api/',
     },
-    sitemap: 'https://ai-directory-steel-eight.vercel.app/sitemap.xml',
+    sitemap: 'https://curatedailist.com/sitemap.xml',
   };
 }

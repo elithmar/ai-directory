@@ -16,6 +16,40 @@ const fallbackTools = [
   { id: '6', slug: 'grammarlygo', category: 'Productivity', name: 'GrammarlyGO', description: 'On-demand AI communication assistance. Compose, rewrite, ideate, and reply effortlessly across all your apps.', affiliate_link: 'https://grammarly.com' },
 ];
 
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { data: tools } = await supabase
+    .from('tools')
+    .select('name, description')
+    .eq('slug', params.slug)
+    .limit(1);
+
+  let tool = tools?.[0];
+
+  if (!tool) {
+    const { data: allTools } = await supabase.from('tools').select('name, description');
+    if (allTools) {
+      tool = allTools.find(t => t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+    }
+  }
+
+  if (!tool) {
+    tool = fallbackTools.find(t => t.slug === params.slug);
+  }
+
+  if (!tool) {
+    return {
+      title: 'Tool Not Found | Curated AI List',
+    };
+  }
+
+  return {
+    title: `${tool.name} Review 2026 - Pros, Cons & Pricing | Curated AI List`,
+    description: tool.description,
+  };
+}
+
 export default async function ToolPage({ params }: { params: { slug: string } }) {
   const { data: tools } = await supabase
     .from('tools')
