@@ -15,27 +15,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY || '';
+    const groqApiKey = process.env.GROQ_API_KEY;
     
-    // 1. Fetch available models to find one that works for her specific key
-    const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-    const modelsData = await modelsRes.json();
-    
-    if (!modelsRes.ok) {
-        throw new Error(`Failed to list models: ${JSON.stringify(modelsData)}`);
-    }
-
-    // Find the first model that supports generateContent
-    let selectedModel = 'models/gemini-1.5-flash';
-    if (modelsData.models && modelsData.models.length > 0) {
-        const supportedModels = modelsData.models.filter((m: any) => 
-            m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent')
-        );
-        
-        const flashModel = supportedModels.find((m: any) => m.name.includes('gemini-1.5-flash'));
-        const proModel = supportedModels.find((m: any) => m.name.includes('gemini-pro'));
-        
-        selectedModel = flashModel?.name || proModel?.name || supportedModels[0]?.name || 'models/gemini-1.5-flash';
+    if (!groqApiKey) {
+        return NextResponse.json({ error: 'GROQ_API_KEY is not set in Vercel environment variables' }, { status: 500 });
     }
 
     const prompt = `
@@ -43,36 +26,41 @@ export async function GET(request: Request) {
       Write a highly engaging, long-form SEO guide (around 500-800 words) about a trending topic in Artificial Intelligence (e.g., "Top 10 AI Tools for Marketing in 2026", or "How to automate your small business with AI").
       
       Format the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
-      - "title": A catchy, SEO-optimized title for the guide.
-      - "slug": A URL-friendly slug (e.g., top-10-ai-marketing-tools-2026).
-      - "content": The full body of the article written in Markdown format (use ## for subheaders, * for bullet points). Ensure the content is deep, valuable, and well-structured.
+      {
+        "title": "A catchy, SEO-optimized title for the guide",
+        "slug": "a-url-friendly-slug",
+        "content": "The full body of the article written in Markdown format (use ## for subheaders, * for bullet points)."
+      }
     `;
 
-    // 2. Generate content using raw fetch to avoid any SDK version issues
-    const generateRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/${selectedModel}:generateContent?key=${apiKey}`, {
+    // 2. Generate content using Groq API
+    const generateRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${groqApiKey}`
+        },
         body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.7 }
+            model: 'llama3-70b-8192',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            response_format: { type: 'json_object' }
         })
     });
     
     const generateData = await generateRes.json();
     
     if (!generateRes.ok) {
-        throw new Error(`Generation failed with model ${selectedModel}: ${JSON.stringify(generateData)}`);
+        throw new Error(`Groq generation failed: ${JSON.stringify(generateData)}`);
     }
 
-    const text = generateData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const text = generateData.choices?.[0]?.message?.content || '';
     
-    // Clean JSON parsing
-    const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
     let data;
     try {
-        data = JSON.parse(cleanedText);
+        data = JSON.parse(text);
     } catch (e) {
-        throw new Error(`Failed to parse AI response as JSON: ${cleanedText}`);
+        throw new Error(`Failed to parse AI response as JSON: ${text}`);
     }
 
     // Insert into Supabase
@@ -91,7 +79,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, guide: data.title, modelUsed: selectedModel });
+    return NextResponse.json({ success: true, guide: data.title, modelUsed: 'llama3-70b' });
   } catch (error: any) {
     console.error('Error generating guide:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
