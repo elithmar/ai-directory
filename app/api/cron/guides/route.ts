@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = `
       You are an expert SEO copywriter and AI strategist for a website called "Curated AI List".
