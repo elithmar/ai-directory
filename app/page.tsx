@@ -40,13 +40,13 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
       {/* Featured Section */}
       {!searchParams.q && !searchParams.category && featuredTool && (
         <section style={{ marginBottom: '4rem' }}>
-          <div style={{ padding: '3rem', background: 'linear-gradient(135deg, rgba(62, 172, 252, 0.1), rgba(255,255,255,0.02))', borderRadius: '24px', border: '1px solid rgba(62, 172, 252, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <span style={{ background: 'var(--accent)', color: '#fff', padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '1rem' }}>Featured Tool of the Day</span>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{featuredTool.name}</h2>
-            <p style={{ fontSize: '1.2rem', color: '#aaa', marginBottom: '2rem', maxWidth: '600px' }}>{featuredTool.description}</p>
+          <div style={{ padding: '4rem 2rem', background: 'linear-gradient(135deg, rgba(62, 172, 252, 0.1), rgba(255,255,255,0.02))', borderRadius: '24px', border: '1px solid rgba(62, 172, 252, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <span style={{ background: 'var(--accent)', color: '#fff', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Featured Tool of the Day</span>
+            <h2 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', fontWeight: '800', letterSpacing: '-1px' }}>{featuredTool.name}</h2>
+            <p style={{ fontSize: '1.2rem', color: '#cbd5e1', marginBottom: '2.5rem', maxWidth: '800px', lineHeight: '1.8', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{featuredTool.description}</p>
             <Link 
               href={`/tool/${featuredTool.slug || featuredTool.name.toLowerCase().replace(/\\s+/g, '-')}`}
-              style={{ padding: '16px 32px', background: '#fff', color: '#000', borderRadius: '12px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.1rem' }}
+              style={{ padding: '16px 36px', background: '#fff', color: '#000', borderRadius: '30px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.1rem', transition: 'transform 0.2s ease', boxShadow: '0 4px 14px rgba(255,255,255,0.25)' }}
             >
               Read Full Review &rarr;
             </Link>
