@@ -37,20 +37,20 @@ function parseMarkdownToHTML(markdown: string) {
   let html = markdown;
   
   // Headers
-  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+  html = html.replace(/^### (.*$)/gim, '<h3 style="margin-top: 2.5rem; margin-bottom: 1rem; color: #fff; font-size: 1.4rem;">$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 style="margin-top: 3.5rem; margin-bottom: 1.5rem; color: #fff; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 style="margin-top: 3rem; margin-bottom: 1.5rem;">$1</h1>');
   
   // Bold
-  html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+  html = html.replace(/\*\*(.*?)\*\*/gim, '<strong style="color: #fff; font-weight: 600;">$1</strong>');
   
   // Links
   html = html.replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2' target='_blank' rel='noopener noreferrer' style='color: var(--accent);'>$1</a>");
   
   // Lists
-  html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
-  html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
-  html = html.replace(/(<li>[\s\S]*<\/li>)/gi, '<ul style="margin-bottom: 1.5rem; padding-left: 1.5rem; color: #ccc; line-height: 1.8;">$1</ul>');
+  html = html.replace(/^\* (.*$)/gim, '<li style="margin-bottom: 1.2rem; color: #cbd5e1; font-size: 1.15rem; font-weight: 300; line-height: 1.8;">$1</li>');
+  html = html.replace(/^- (.*$)/gim, '<li style="margin-bottom: 1.2rem; color: #cbd5e1; font-size: 1.15rem; font-weight: 300; line-height: 1.8;">$1</li>');
+  html = html.replace(/(<li style=[\s\S]*<\/li>)/gi, '<ul style="margin-bottom: 2rem; padding-left: 1.5rem;">$1</ul>');
   
   // Paragraphs (Lines that don't start with a tag)
   html = html.split('\n').map(line => {
