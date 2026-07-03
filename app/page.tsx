@@ -73,3 +73,4 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
     </main>
   );
 }
+// Trigger rebuild for daily guides cron
