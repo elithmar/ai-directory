@@ -21,13 +21,20 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'GROQ_API_KEY is not set in Vercel environment variables' }, { status: 500 });
     }
 
+    // 1. Obtener títulos existentes para no duplicar temas
+    const { data: existingGuides } = await supabase.from('guides').select('title').order('created_at', { ascending: false }).limit(20);
+    const existingTitles = existingGuides ? existingGuides.map((g: any) => g.title).join('\\n- ') : 'None';
+
       const prompt = `
       You are an expert SEO copywriter and AI strategist for a website called "Curated AI List".
-      Write a highly engaging, long-form SEO guide (around 500-800 words) about a trending topic in Artificial Intelligence (e.g., "Top 10 AI Tools for Marketing in 2026", or "How to automate your small business with AI").
+      Write a highly engaging, long-form SEO guide (around 500-800 words) about a trending topic in Artificial Intelligence.
       CRITICAL INSTRUCTION 1: Make the content highly didactic, dynamic, and practical. For every tool or concept you mention, you MUST include a specific, real-world example of how it is used practically by businesses or individuals. Do not just describe what a tool does; explain *how* it is used in a specific scenario.
       CRITICAL INSTRUCTION 2: Under NO circumstances should you mention traditional software or web 2.0 tools that merely have AI features bolted on (e.g., Google Analytics, Microsoft Excel, Canva, traditional CRMs). You MUST exclusively recommend 100% native, pure-blood AI tools (e.g., Midjourney, Jasper, ElevenLabs, ChatGPT, Claude, etc.).
-
+      CRITICAL INSTRUCTION 3: You MUST choose a completely unique topic and title. Explore diverse niches like AI for Healthcare, AI for Finance, Generative Video, AI for Coding, AI for Graphic Design, etc. DO NOT start your title with the word "Revolutionizing".
       
+      Here are the guides we have already published. DO NOT write about these topics or use similar titles:
+      - ${existingTitles}
+
       Format the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
       {
         "title": "A catchy, SEO-optimized title for the guide",
