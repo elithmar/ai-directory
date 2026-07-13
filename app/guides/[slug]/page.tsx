@@ -30,6 +30,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${guide.title} | Curated AI List`,
     description: desc,
+    openGraph: {
+      title: guide.title,
+      description: desc,
+      url: `https://curatedailist.com/guides/${params.slug}`,
+      type: 'article',
+      siteName: 'Curated AI List',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: guide.title,
+      description: desc,
+    }
   };
 }
 
@@ -78,7 +90,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     return (
       <main className="container">
         <h1>Guide not found</h1>
-        <Link href="/guides" style={{ color: 'var(--accent)' }}>&larr; Back to Guides</Link>
+        <Link href="/" style={{ color: 'var(--accent)' }}>&larr; Back to Directory</Link>
       </main>
     );
   }
@@ -97,7 +109,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
   return (
     <main className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ marginBottom: '3rem' }}>
-        <Link href="/guides" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Guides</Link>
+        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
       </div>
       
       <article>

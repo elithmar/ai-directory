@@ -1,6 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
 import CookieBanner from '@/components/CookieBanner';
+import ScrollToTop from './components/ScrollToTop';
 
 export const metadata = {
   metadataBase: new URL('https://curatedailist.com'),
@@ -49,6 +50,7 @@ export default function RootLayout({
           </div>
         </footer>
         <CookieBanner />
+        <ScrollToTop />
       </body>
     </html>
   );
