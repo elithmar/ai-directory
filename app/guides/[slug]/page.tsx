@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import ShareButtons from '../../components/ShareButtons';
+import TableOfContents from '../../components/TableOfContents';
 
 export const revalidate = 0;
 
@@ -134,18 +135,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '4rem', alignItems: 'start' }}>
           {/* Floating Table of Contents */}
-          <aside style={{ position: 'sticky', top: '100px', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Table of Contents</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {toc.map((item, idx) => (
-                <li key={idx} style={{ marginBottom: '0.75rem', paddingLeft: item.level === 3 ? '1rem' : '0' }}>
-                  <a href={`#${item.id}`} style={{ color: '#888', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }}>
-                    {item.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <TableOfContents toc={toc} />
 
           {/* Render the markdown as HTML */}
           <div>

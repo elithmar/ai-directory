@@ -78,6 +78,20 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
     }
   };
 
+  const getCategoryIcon = (category: string) => {
+    const map: Record<string, string> = {
+      'Marketing': '✍️',
+      'Video': '🎥',
+      'Audio': '🎵',
+      'Productivity': '⚡️',
+      'Design': '🎨',
+      'Development': '💻',
+      'Sales': '📈',
+      'Support': '🤝'
+    };
+    return map[category] || '✨';
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
       
@@ -137,7 +151,7 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
               >
                 <span style={{ fontWeight: 'bold' }}>{p.name}</span>
                 <span style={{ fontSize: '0.75rem', color: 'var(--primary)', textTransform: 'uppercase', padding: '2px 8px', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '10px' }}>
-                  {p.category}
+                  {getCategoryIcon(p.category)} {p.category}
                 </span>
               </div>
             ))}
@@ -163,10 +177,13 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
                 transition: 'all 0.3s ease',
                 background: isSelected ? 'var(--accent)' : (isHighlighted ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.05)'),
                 color: isSelected ? '#fff' : (isHighlighted ? 'var(--primary)' : '#aaa'),
-                border: isHighlighted && !isSelected ? '1px solid var(--primary)' : '1px solid transparent'
+                border: isHighlighted && !isSelected ? '1px solid var(--primary)' : '1px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
-              {cat}
+              <span>{getCategoryIcon(cat)}</span> {cat}
             </button>
           )
         })}
