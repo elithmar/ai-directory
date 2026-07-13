@@ -57,7 +57,7 @@ export async function GET(request: Request) {
       1. DO NOT sound like a corporate robot. Sound like a passionate tech founder building in public.
       2. The opening sentence MUST be a strong hook (e.g., controversial statement, bold claim, or high curiosity).
       3. Keep it under 280 characters total, including the link.
-      4. Use 1-2 relevant emojis max.
+      4. Because this is a new account, you MUST include 2-3 highly targeted hashtags at the very end of the tweet (e.g., #AI #Tech #ArtificialIntelligence) to help the algorithm discover the post.
       5. Include the link exactly as provided.
       
       Format your response STRICTLY as a JSON object with this exact key:
