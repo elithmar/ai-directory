@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 
@@ -20,6 +20,12 @@ export default function ToolGrid({
   const [tools, setTools] = useState(initialTools);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialTools.length === 12); // If initial is 12, there MIGHT be more
+
+  // CRITICAL FIX: Update state when user clicks a filter (URL changes)
+  useEffect(() => {
+    setTools(initialTools);
+    setHasMore(initialTools.length >= 12);
+  }, [initialTools]);
 
   const loadMore = async () => {
     setLoading(true);
