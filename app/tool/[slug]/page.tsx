@@ -81,6 +81,20 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
   const review = tool.review_data || null;
 
+  const getCategoryIcon = (category: string) => {
+    const map: Record<string, string> = {
+      'Marketing': '✍️',
+      'Video': '🎥',
+      'Audio': '🎵',
+      'Productivity': '⚡️',
+      'Design': '🎨',
+      'Development': '💻',
+      'Sales': '📈',
+      'Support': '🤝'
+    };
+    return map[category] || '✨';
+  };
+
   return (
     <main className="container">
       <div style={{ marginBottom: '2rem' }}>
@@ -90,7 +104,9 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       <article className="tool-detail">
         <header style={{ marginBottom: '3rem' }}>
           <span style={{ 
-            display: 'inline-block',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
             background: 'var(--accent)', 
             color: '#fff', 
             padding: '6px 16px', 
@@ -101,7 +117,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            {tool.category || 'AI Tool'}
+            <span style={{ fontSize: '1.1rem' }}>{getCategoryIcon(tool.category)}</span> {tool.category || 'AI Tool'}
           </span>
           
           <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', background: 'linear-gradient(45deg, #fff, #aaa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-1px' }}>

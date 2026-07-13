@@ -48,10 +48,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 // Ultra-lightweight markdown parser for safe, internal AI content
 function parseMarkdownToHTML(markdown: string) {
   let html = markdown;
+  let toc: { id: string, title: string, level: number }[] = [];
   
   // Headers
-  html = html.replace(/^### (.*$)/gim, '<h3 style="margin-top: 2.5rem; margin-bottom: 1rem; color: #fff; font-size: 1.4rem;">$1</h3>');
-  html = html.replace(/^## (.*$)/gim, '<h2 style="margin-top: 3.5rem; margin-bottom: 1.5rem; color: #fff; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">$1</h2>');
+  html = html.replace(/^### (.*$)/gim, (match, title) => {
+    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    toc.push({ id, title, level: 3 });
+    return `<h3 id="${id}" style="margin-top: 2.5rem; margin-bottom: 1rem; color: #fff; font-size: 1.4rem; scroll-margin-top: 100px;">${title}</h3>`;
+  });
+  html = html.replace(/^## (.*$)/gim, (match, title) => {
+    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    toc.push({ id, title, level: 2 });
+    return `<h2 id="${id}" style="margin-top: 3.5rem; margin-bottom: 1.5rem; color: #fff; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; scroll-margin-top: 100px;">${title}</h2>`;
+  });
   html = html.replace(/^# (.*$)/gim, '<h1 style="margin-top: 3rem; margin-bottom: 1.5rem;">$1</h1>');
   
   // Bold
@@ -74,7 +83,7 @@ function parseMarkdownToHTML(markdown: string) {
     return line;
   }).join('\n');
 
-  return html;
+  return { html, toc };
 }
 
 export default async function GuidePage({ params }: { params: { slug: string } }) {
@@ -95,7 +104,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     );
   }
 
-  const htmlContent = parseMarkdownToHTML(guide.content || '');
+  const { html: htmlContent, toc } = parseMarkdownToHTML(guide.content || '');
 
   // Fetch 3 recent tools for Internal Linking
   const { data: recentTools } = await supabase
@@ -107,7 +116,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
   const relatedTools = recentTools || [];
 
   return (
-    <main className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <main className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ marginBottom: '3rem' }}>
         <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
       </div>
@@ -117,42 +126,61 @@ export default async function GuidePage({ params }: { params: { slug: string } }
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', lineHeight: '1.2', letterSpacing: '-1px' }}>
             {guide.title}
           </h1>
-          <div style={{ color: '#888', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <div style={{ color: '#888', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1.5rem' }}>
             Published on {new Date(guide.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
           <ShareButtons url={`https://curatedailist.com/guides/${guide.slug}`} title={guide.title} />
         </header>
         
-        {/* Render the markdown as HTML */}
-        <div 
-          className="markdown-content" 
-          style={{ paddingBottom: '3rem' }}
-          dangerouslySetInnerHTML={{ __html: htmlContent }} 
-        />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '4rem', alignItems: 'start' }}>
+          {/* Floating Table of Contents */}
+          <aside style={{ position: 'sticky', top: '100px', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Table of Contents</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {toc.map((item, idx) => (
+                <li key={idx} style={{ marginBottom: '0.75rem', paddingLeft: item.level === 3 ? '1rem' : '0' }}>
+                  <a href={`#${item.id}`} style={{ color: '#888', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = '#888'}>
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
-        <div style={{ textAlign: 'right', fontStyle: 'italic', color: 'var(--primary)', fontWeight: '500', fontSize: '1.1rem', marginTop: '1rem' }}>
-          — The Curated AI List Team
-        </div>
+          {/* Render the markdown as HTML */}
+          <div>
+            <div 
+              className="markdown-content" 
+              style={{ paddingBottom: '3rem' }}
+              dangerouslySetInnerHTML={{ __html: htmlContent }} 
+            />
 
-        {/* Editorial Methodology & Sources */}
-        <div style={{ 
-          marginTop: '4rem',
-          padding: '2rem', 
-          background: 'var(--surface)', 
-          borderTop: '2px solid var(--border)',
-          fontSize: '0.95rem',
-          color: '#94a3b8'
-        }}>
-          <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Editorial Methodology & Sources</h4>
-          <p style={{ marginBottom: '0.5rem' }}>
-            At <strong>Curated AI List</strong>, we pride ourselves on being the most reliable destination for AI software discovery. 
-            To bring you the most accurate and up-to-date information, our editorial team leverages advanced AI algorithms to aggregate 
-            data directly from official software documentation, verified user reviews, and live market testing.
-          </p>
-          <p>
-            While we utilize technology to process information at scale, every guide is rigorously curated and structured 
-            to ensure 100% reliability, objectivity, and value for our readers.
-          </p>
+            <div style={{ textAlign: 'right', fontStyle: 'italic', color: 'var(--primary)', fontWeight: '500', fontSize: '1.1rem', marginTop: '1rem' }}>
+              — The Curated AI List Team
+            </div>
+
+            {/* Editorial Methodology & Sources */}
+            <div style={{ 
+              marginTop: '4rem',
+              padding: '2rem', 
+              background: 'var(--surface)', 
+              borderTop: '2px solid var(--border)',
+              fontSize: '0.95rem',
+              color: '#94a3b8',
+              borderRadius: '16px'
+            }}>
+              <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem' }}>Editorial Methodology & Sources</h4>
+              <p style={{ marginBottom: '0.5rem' }}>
+                At <strong>Curated AI List</strong>, we pride ourselves on being the most reliable destination for AI software discovery. 
+                To bring you the most accurate and up-to-date information, our editorial team leverages advanced AI algorithms to aggregate 
+                data directly from official software documentation, verified user reviews, and live market testing.
+              </p>
+              <p>
+                While we utilize technology to process information at scale, every guide is rigorously curated and structured 
+                to ensure 100% reliability, objectivity, and value for our readers.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Related Tools for Internal Linking (SEO) */}
@@ -167,7 +195,24 @@ export default async function GuidePage({ params }: { params: { slug: string } }
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s' }}>
-                    {tool.category && <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '1px' }}>{tool.category}</span>}
+                    {tool.category && (
+                      <span style={{ 
+                        fontSize: '0.75rem', 
+                        textTransform: 'uppercase', 
+                        color: 'var(--accent)', 
+                        fontWeight: 'bold', 
+                        letterSpacing: '1px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: 'rgba(255,255,255,0.05)',
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        width: 'fit-content'
+                      }}>
+                        {tool.category}
+                      </span>
+                    )}
                     <h4 style={{ fontSize: '1.25rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>{tool.name}</h4>
                     <p style={{ fontSize: '0.9rem', color: '#888', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{tool.description}</p>
                   </div>

@@ -8,6 +8,20 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const getCategoryIcon = (category: string) => {
+  const map: Record<string, string> = {
+    'Marketing': '✍️',
+    'Video': '🎥',
+    'Audio': '🎵',
+    'Productivity': '⚡️',
+    'Design': '🎨',
+    'Development': '💻',
+    'Sales': '📈',
+    'Support': '🤝'
+  };
+  return map[category] || '✨';
+};
+
 export default function ToolGrid({ 
   initialTools, 
   searchQuery = '', 
@@ -62,7 +76,24 @@ export default function ToolGrid({
       <div className="grid">
         {tools.map((tool) => (
           <article key={tool.id || tool.name} className="card">
-            {tool.category && <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '1px' }}>{tool.category}</span>}
+            {tool.category && (
+              <span style={{ 
+                fontSize: '0.75rem', 
+                textTransform: 'uppercase', 
+                color: 'var(--accent)', 
+                fontWeight: 'bold', 
+                letterSpacing: '1px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(255,255,255,0.05)',
+                padding: '4px 10px',
+                borderRadius: '12px',
+                width: 'fit-content'
+              }}>
+                <span style={{ fontSize: '1rem' }}>{getCategoryIcon(tool.category)}</span> {tool.category}
+              </span>
+            )}
             <h2 className="card-title" style={{ marginTop: '0.5rem' }}>{tool.name}</h2>
             <p className="card-description">{tool.description}</p>
             <Link 
@@ -75,7 +106,29 @@ export default function ToolGrid({
         ))}
       </div>
 
-      {hasMore && (
+      {loading && (
+        <div className="grid" style={{ marginTop: tools.length > 0 ? '2rem' : '0' }}>
+          {[1, 2, 3].map((i) => (
+            <article key={i} className="card" style={{ animation: 'pulse 1.5s infinite ease-in-out', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ width: '40%', height: '1.2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', marginBottom: '1rem' }}></div>
+              <div style={{ width: '80%', height: '1.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', marginBottom: '0.5rem' }}></div>
+              <div style={{ width: '100%', height: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', marginBottom: '0.5rem' }}></div>
+              <div style={{ width: '90%', height: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', marginBottom: '1.5rem' }}></div>
+              <div style={{ width: '30%', height: '2.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', marginTop: 'auto' }}></div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.5; }
+          100% { opacity: 1; }
+        }
+      `}} />
+
+      {hasMore && !loading && (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem', marginBottom: '4rem' }}>
           <button 
             onClick={loadMore} 
