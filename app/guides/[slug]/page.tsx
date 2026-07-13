@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import ShareButtons from '../../components/ShareButtons';
 
 export const revalidate = 0;
 
@@ -84,6 +85,15 @@ export default async function GuidePage({ params }: { params: { slug: string } }
 
   const htmlContent = parseMarkdownToHTML(guide.content || '');
 
+  // Fetch 3 recent tools for Internal Linking
+  const { data: recentTools } = await supabase
+    .from('tools')
+    .select('id, name, slug, description, category')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  const relatedTools = recentTools || [];
+
   return (
     <main className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ marginBottom: '3rem' }}>
@@ -91,13 +101,14 @@ export default async function GuidePage({ params }: { params: { slug: string } }
       </div>
       
       <article>
-        <header style={{ marginBottom: '4rem', textAlign: 'center' }}>
+        <header style={{ marginBottom: '4rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', lineHeight: '1.2', letterSpacing: '-1px' }}>
             {guide.title}
           </h1>
           <div style={{ color: '#888', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
             Published on {new Date(guide.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
+          <ShareButtons url={`https://curatedailist.com/guides/${guide.slug}`} title={guide.title} />
         </header>
         
         {/* Render the markdown as HTML */}
@@ -131,6 +142,28 @@ export default async function GuidePage({ params }: { params: { slug: string } }
             to ensure 100% reliability, objectivity, and value for our readers.
           </p>
         </div>
+
+        {/* Related Tools for Internal Linking (SEO) */}
+        {relatedTools.length > 0 && (
+          <div style={{ marginTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem' }}>
+            <h3 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Trending AI Tools</h3>
+            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))' }}>
+              {relatedTools.map((tool) => (
+                <Link 
+                  key={tool.id} 
+                  href={`/tool/${tool.slug || tool.name.toLowerCase().replace(/\\s+/g, '-')}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s' }}>
+                    {tool.category && <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '1px' }}>{tool.category}</span>}
+                    <h4 style={{ fontSize: '1.25rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>{tool.name}</h4>
+                    <p style={{ fontSize: '0.9rem', color: '#888', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{tool.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
         
       </article>
     </main>

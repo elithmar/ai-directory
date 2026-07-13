@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import SearchAndFilter from './components/SearchAndFilter';
+import ToolGrid from './components/ToolGrid';
 
 export const revalidate = 0;
 
@@ -54,22 +55,12 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         </section>
       )}
 
-      {/* Grid */}
-      <div className="grid">
-        {(searchParams.q || searchParams.category ? tools : tools.slice(1)).map((tool) => (
-          <article key={tool.id || tool.name} className="card">
-            {tool.category && <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '1px' }}>{tool.category}</span>}
-            <h2 className="card-title" style={{ marginTop: '0.5rem' }}>{tool.name}</h2>
-            <p className="card-description">{tool.description}</p>
-            <Link 
-              href={`/tool/${tool.slug || tool.name.toLowerCase().replace(/\\s+/g, '-')}`} 
-              className="card-link"
-            >
-              View Details
-            </Link>
-          </article>
-        ))}
-      </div>
+      {/* Grid with Load More Pagination */}
+      <ToolGrid 
+        initialTools={searchParams.q || searchParams.category ? tools : tools.slice(1)} 
+        searchQuery={searchParams.q} 
+        categoryQuery={searchParams.category} 
+      />
     </main>
   );
 }
