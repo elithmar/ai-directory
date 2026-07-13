@@ -68,6 +68,24 @@ export async function GET(request: Request) {
       }
     `;
 
+    // 2. Fetch available models from Groq to avoid decommissioned models
+    const modelsRes = await fetch('https://api.groq.com/openai/v1/models', {
+        headers: { 'Authorization': `Bearer ${groqApiKey}` }
+    });
+    const modelsData = await modelsRes.json();
+    
+    let selectedModel = 'llama3-8b-8192'; // extremely safe fallback
+    if (modelsRes.ok && modelsData.data) {
+        const availableModels = modelsData.data.map((m: any) => m.id);
+        const bestModel = availableModels.find((m: string) => m.includes('70b') && !m.includes('tool-use')) 
+            || availableModels.find((m: string) => m.includes('llama'))
+            || availableModels[0];
+        if (bestModel) {
+            selectedModel = bestModel;
+        }
+    }
+
+    // 3. Generate a Viral Tweet using Groq
     const generateRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 
@@ -75,7 +93,7 @@ export async function GET(request: Request) {
             'Authorization': `Bearer ${groqApiKey}`
         },
         body: JSON.stringify({
-            model: 'llama-3.1-70b-versatile',
+            model: selectedModel,
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.8,
             response_format: { type: 'json_object' }
