@@ -37,11 +37,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       url: `https://curatedailist.com/guides/${params.slug}`,
       type: 'article',
       siteName: 'Curated AI List',
+      images: [
+        {
+          url: '/opengraph-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: guide.title,
+        }
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: guide.title,
       description: desc,
+      images: ['/twitter-image.jpg'],
     }
   };
 }
