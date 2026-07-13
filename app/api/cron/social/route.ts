@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { TwitterApi } from 'twitter-api-v2';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   // Security check for Vercel Cron
   const authHeader = request.headers.get('Authorization');
@@ -73,7 +75,7 @@ export async function GET(request: Request) {
             'Authorization': `Bearer ${groqApiKey}`
         },
         body: JSON.stringify({
-            model: 'llama3-70b-8192',
+            model: 'llama-3.1-70b-versatile',
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.8,
             response_format: { type: 'json_object' }
@@ -81,7 +83,8 @@ export async function GET(request: Request) {
     });
     
     if (!generateRes.ok) {
-        throw new Error('Failed to generate tweet with Groq');
+        const errorText = await generateRes.text();
+        throw new Error(`Failed to generate tweet with Groq: ${generateRes.status} ${errorText}`);
     }
 
     const generateData = await generateRes.json();
