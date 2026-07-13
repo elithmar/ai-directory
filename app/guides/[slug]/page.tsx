@@ -139,7 +139,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {toc.map((item, idx) => (
                 <li key={idx} style={{ marginBottom: '0.75rem', paddingLeft: item.level === 3 ? '1rem' : '0' }}>
-                  <a href={`#${item.id}`} style={{ color: '#888', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = '#888'}>
+                  <a href={`#${item.id}`} style={{ color: '#888', textDecoration: 'none', fontSize: '0.95rem', transition: 'color 0.2s' }}>
                     {item.title}
                   </a>
                 </li>
