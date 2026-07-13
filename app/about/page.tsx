@@ -1,6 +1,17 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'About Us | Curated AI List',
+  description: 'Learn more about Curated AI List, our mission, and how we curate the best artificial intelligence tools for professionals.',
+};
+
 export default function AboutPage() {
   return (
-    <main className="container" style={{ maxWidth: '800px', padding: '4rem 2rem' }}>
+    <main className="container" style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '4rem', paddingBottom: '4rem' }}>
+      <div style={{ marginBottom: '3rem' }}>
+        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
+      </div>
       <h1 style={{ fontSize: '3rem', marginBottom: '2rem', background: 'linear-gradient(to right, #fff, #a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
         About Curated AI List
       </h1>

@@ -1,7 +1,12 @@
+import Link from 'next/link';
+
 export default function PrivacyPolicy() {
   return (
-    <main className="container" style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>Privacy Policy</h1>
+    <main className="container" style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '4rem', paddingBottom: '4rem' }}>
+      <div style={{ marginBottom: '3rem' }}>
+        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
+      </div>
+      <h1 style={{ fontSize: '3rem', marginBottom: '2rem' }}>Privacy Policy</h1>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: 'var(--text-muted)' }}>
         <p>Last updated: {new Date().toLocaleDateString()}</p>

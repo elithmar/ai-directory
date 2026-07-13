@@ -21,7 +21,10 @@ export default async function GuidesPage() {
 
   return (
     <main className="container">
-      <section className="hero" style={{ paddingBottom: '2rem' }}>
+      <div style={{ marginBottom: '2rem', paddingTop: '2rem' }}>
+        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
+      </div>
+      <section className="hero" style={{ paddingBottom: '2rem', paddingTop: '1rem' }}>
         <h1 style={{ fontSize: '4rem', marginBottom: '1rem' }}>AI Guides &amp; Tutorials</h1>
         <p style={{ fontSize: '1.2rem', color: '#aaa', maxWidth: '600px', margin: '0 auto' }}>
           Deep-dive strategies and tutorials to help you maximize your productivity using the latest Artificial Intelligence tools.
