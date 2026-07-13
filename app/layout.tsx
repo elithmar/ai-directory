@@ -4,7 +4,7 @@ import CookieBanner from '@/components/CookieBanner';
 import ScrollToTop from './components/ScrollToTop';
 
 export const metadata = {
-  metadataBase: new URL('https://curatedailist.com'),
+  metadataBase: new URL('https://www.curatedailist.com'),
   title: 'Curated AI List | Discover the Best Artificial Intelligence Tools',
   description: 'The ultimate directory for discovering the best AI tools, softwares, and guides. Boost your productivity, marketing, and business with our curated AI list.',
   openGraph: {

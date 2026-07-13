@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: guide.title,
       description: desc,
-      url: `https://curatedailist.com/guides/${params.slug}`,
+      url: `https://www.curatedailist.com/guides/${params.slug}`,
       type: 'article',
       siteName: 'Curated AI List',
       images: [
