@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   try {
     const { TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = process.env;
     
-    if (!TWITTER_API_KEY || !TWITTER_ACCESS_TOKEN) {
+    if (!TWITTER_API_KEY || !TWITTER_ACCESS_TOKEN || !TWITTER_API_SECRET || !TWITTER_ACCESS_SECRET) {
          return NextResponse.json({ error: 'Twitter API keys are missing in Vercel environment variables' }, { status: 500 });
     }
 
