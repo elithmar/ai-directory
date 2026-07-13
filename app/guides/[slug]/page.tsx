@@ -64,8 +64,9 @@ function parseMarkdownToHTML(markdown: string) {
   });
   html = html.replace(/^# (.*$)/gim, '<h1 style="margin-top: 3rem; margin-bottom: 1.5rem;">$1</h1>');
   
-  // Bold
+  // Bold and Emphasis (AI often uses single asterisk for tool names)
   html = html.replace(/\*\*(.*?)\*\*/gim, '<strong style="color: #fff; font-weight: 600;">$1</strong>');
+  html = html.replace(/\*([^\*]+?)\*/gim, '<strong style="color: #fff; font-weight: 500;">$1</strong>');
   
   // Links
   html = html.replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2' target='_blank' rel='noopener noreferrer' style='color: var(--accent);'>$1</a>");
