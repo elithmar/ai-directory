@@ -45,7 +45,7 @@ export async function GET(request: Request) {
     }
 
     const latestGuide = guides[0];
-    const guideUrl = `https://curatedailist.com/guides/${latestGuide.slug}`;
+    const guideUrl = `https://www.curatedailist.com/guides/${latestGuide.slug}`;
 
     // 2. Generate a Viral Tweet using Groq
     const prompt = `
