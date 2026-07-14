@@ -14,7 +14,7 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
   let query = supabase.from('tools').select('*').order('created_at', { ascending: false });
 
   if (searchParams.q) {
-    query = query.ilike('name', `%${searchParams.q}%`);
+    query = query.or(`name.ilike.%${searchParams.q}%,description.ilike.%${searchParams.q}%,category.ilike.%${searchParams.q}%`);
   }
   if (searchParams.category) {
     query = query.eq('category', searchParams.category);
