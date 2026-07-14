@@ -45,16 +45,19 @@ export async function GET(request: Request) {
         }
     }
 
+    const categories = ['Video', 'Audio', 'Marketing', 'Productivity', 'Design'];
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+
     const prompt = `
       You are an expert AI curator for a B2B SaaS directory.
       We already have these tools in our database: ${existingNames || 'None'}.
       
-      Suggest ONE high-quality, real AI tool that is NOT in the list above.
+      Suggest ONE high-quality, real AI tool that is NOT in the list above, specifically in the **${randomCategory}** category.
       Provide the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
       {
         "name": "The official name of the tool",
         "slug": "url-friendly-slug",
-        "category": "MUST BE EXACTLY ONE OF THESE: Video, Audio, Marketing, Productivity, or Design. (Do not use any other word)",
+        "category": "${randomCategory}",
         "description": "2-sentence SEO-optimized description",
         "affiliate_link": "URL",
         "review_data": {
