@@ -49,10 +49,12 @@ export async function GET(request: Request) {
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
 
     const prompt = `
-      You are an expert AI curator for a B2B SaaS directory.
+      You are an expert AI curator and trend-spotter for a premium B2B SaaS directory in 2026.
       We already have these tools in our database: ${existingNames || 'None'}.
       
-      Suggest ONE high-quality, real AI tool that is NOT in the list above, specifically in the **${randomCategory}** category.
+      Your task is to suggest ONE high-quality, real, and HIGHLY TRENDING AI tool that is NOT in the list above, specifically in the **${randomCategory}** category.
+      CRITICAL INSTRUCTION: Do not suggest old, legacy, or outdated tools. You must suggest a cutting-edge, highly relevant, and widely talked-about AI tool that professionals are actively using right now.
+
       Provide the response strictly as a JSON object with no markdown formatting or extra text, using these exact keys:
       {
         "name": "The official name of the tool",

@@ -81,6 +81,16 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
   const review = tool.review_data || null;
 
+  // Fetch related tools in the same category
+  const { data: relatedToolsDb } = await supabase
+    .from('tools')
+    .select('id, name, slug, description, category')
+    .eq('category', tool.category)
+    .neq('slug', tool.slug)
+    .limit(3);
+
+  const relatedTools = relatedToolsDb || [];
+
   const getCategoryIcon = (category: string) => {
     const map: Record<string, string> = {
       'Marketing': '✍️',
@@ -110,15 +120,46 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     "url": `https://www.curatedailist.com/tool/${tool.slug}`
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.curatedailist.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": tool.category || "Tools",
+      "item": `https://www.curatedailist.com/?category=${tool.category || ''}`
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": tool.name
+    }]
+  };
+
   return (
     <main className="container">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div style={{ marginBottom: '2rem' }}>
-        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
-      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      
+      <nav aria-label="breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.9rem' }}>
+        <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: '#888' }}>
+          <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Home</Link></li>
+          <li>/</li>
+          <li><Link href={`/?category=${tool.category || ''}`} style={{ color: '#ccc', textDecoration: 'none' }}>{tool.category || 'Tools'}</Link></li>
+          <li>/</li>
+          <li style={{ color: '#fff' }} aria-current="page">{tool.name}</li>
+        </ol>
+      </nav>
       
       <article className="tool-detail">
         <header style={{ marginBottom: '3rem' }}>
@@ -214,6 +255,43 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             Go to {tool.name} &rarr;
           </a>
         </div>
+
+        {/* Related Tools for Internal Linking (SEO) */}
+        {relatedTools.length > 0 && (
+          <div style={{ marginTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem' }}>
+            <h3 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Related {tool.category} Tools</h3>
+            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+              {relatedTools.map((rt) => (
+                <Link 
+                  key={rt.id} 
+                  href={`/tool/${rt.slug || rt.name.toLowerCase().replace(/\\s+/g, '-')}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s' }}>
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      textTransform: 'uppercase', 
+                      color: 'var(--accent)', 
+                      fontWeight: 'bold', 
+                      letterSpacing: '1px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: 'rgba(255,255,255,0.05)',
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      width: 'fit-content'
+                    }}>
+                      {rt.category}
+                    </span>
+                    <h4 style={{ fontSize: '1.25rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>{rt.name}</h4>
+                    <p style={{ fontSize: '0.9rem', color: '#888', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rt.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </article>
     </main>
   );

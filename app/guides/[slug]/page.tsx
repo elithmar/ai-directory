@@ -138,15 +138,45 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     }
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.curatedailist.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://www.curatedailist.com/guides"
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": guide.title
+    }]
+  };
+
   return (
     <main className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div style={{ marginBottom: '3rem' }}>
-        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
-      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <nav aria-label="breadcrumb" style={{ marginBottom: '3rem', fontSize: '0.9rem' }}>
+        <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: '#888' }}>
+          <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Home</Link></li>
+          <li>/</li>
+          <li><Link href="/guides" style={{ color: '#ccc', textDecoration: 'none' }}>Guides</Link></li>
+          <li>/</li>
+          <li style={{ color: '#fff' }} aria-current="page">{guide.title}</li>
+        </ol>
+      </nav>
       
       <article>
         <header style={{ marginBottom: '4rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
