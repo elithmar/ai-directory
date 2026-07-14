@@ -9,11 +9,58 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
   const [predictions, setPredictions] = useState<any[]>([]);
   const [showPredictions, setShowPredictions] = useState(false);
   const [highlightedCategory, setHighlightedCategory] = useState<string | null>(initialCategory || null);
+  const [placeholderText, setPlaceholderText] = useState("Search AI tools...");
   
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
 
   const categories = ['Video', 'Audio', 'Marketing', 'Productivity', 'Design'];
+
+  // Typewriter effect for placeholder
+  useEffect(() => {
+    const texts = [
+      "Search 'video generator'...",
+      "Search 'SEO writer'...",
+      "Search 'logo creator'...",
+      "Search 'voice cloning'...",
+      "Search 'meeting notes'..."
+    ];
+    let currentIndex = 0;
+    let currentText = '';
+    let isDeleting = false;
+    let charIndex = 0;
+    let typingSpeed = 100;
+
+    const type = () => {
+      const fullText = texts[currentIndex];
+      
+      if (isDeleting) {
+        currentText = fullText.substring(0, charIndex - 1);
+        charIndex--;
+        typingSpeed = 50;
+      } else {
+        currentText = fullText.substring(0, charIndex + 1);
+        charIndex++;
+        typingSpeed = 100;
+      }
+
+      setPlaceholderText(currentText);
+
+      if (!isDeleting && currentText === fullText) {
+        typingSpeed = 2000; // Pause at end
+        isDeleting = true;
+      } else if (isDeleting && currentText === '') {
+        isDeleting = false;
+        currentIndex = (currentIndex + 1) % texts.length;
+        typingSpeed = 500; // Pause before new word
+      }
+
+      setTimeout(type, typingSpeed);
+    };
+
+    const timerId = setTimeout(type, 1000);
+    return () => clearTimeout(timerId);
+  }, []);
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -100,7 +147,7 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
         <form onSubmit={handleSearch} style={{ display: 'flex', gap: '1rem', width: '100%' }}>
           <input 
             type="text" 
-            placeholder="Search AI tools (e.g. Jasper)..." 
+            placeholder={placeholderText} 
             value={query}
             onChange={handleInputChange}
             onFocus={() => { if(query) setShowPredictions(true) }}

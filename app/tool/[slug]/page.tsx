@@ -95,8 +95,27 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     return map[category] || '✨';
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": tool.name,
+    "operatingSystem": "Web",
+    "applicationCategory": tool.category,
+    "offers": {
+      "@type": "Offer",
+      "price": review?.pricing?.includes('Free') ? "0.00" : "9.99",
+      "priceCurrency": "USD"
+    },
+    "description": tool.description,
+    "url": `https://www.curatedailist.com/tool/${tool.slug}`
+  };
+
   return (
     <main className="container">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div style={{ marginBottom: '2rem' }}>
         <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
       </div>

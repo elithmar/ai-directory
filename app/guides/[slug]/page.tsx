@@ -126,8 +126,24 @@ export default async function GuidePage({ params }: { params: { slug: string } }
 
   const relatedTools = recentTools || [];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": guide.title,
+    "image": ["https://www.curatedailist.com/opengraph-image.jpg"],
+    "datePublished": new Date(guide.created_at).toISOString(),
+    "author": {
+      "@type": "Organization",
+      "name": "Curated AI List"
+    }
+  };
+
   return (
     <main className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div style={{ marginBottom: '3rem' }}>
         <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>&larr; Back to Directory</Link>
       </div>
