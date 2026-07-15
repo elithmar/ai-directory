@@ -306,3 +306,31 @@ body {
     gap: 1rem;
   }
 }
+
+/* --- Breadcrumbs & Layouts --- */
+.breadcrumb-nav {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.breadcrumb-nav::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.guide-layout {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .guide-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

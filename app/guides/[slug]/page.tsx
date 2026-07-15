@@ -168,7 +168,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <nav aria-label="breadcrumb" style={{ marginBottom: '3rem', fontSize: '0.9rem' }}>
+      <nav className="breadcrumb-nav" aria-label="breadcrumb">
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: '#888' }}>
           <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Home</Link></li>
           <li>/</li>
@@ -189,7 +189,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
           <ShareButtons url={`https://curatedailist.com/guides/${guide.slug}`} title={guide.title} />
         </header>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '4rem', alignItems: 'start' }}>
+        <div className="guide-layout">
           {/* Floating Table of Contents */}
           <TableOfContents toc={toc} />
 

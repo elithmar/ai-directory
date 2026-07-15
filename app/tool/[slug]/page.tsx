@@ -151,7 +151,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       
-      <nav aria-label="breadcrumb" style={{ marginBottom: '2rem', fontSize: '0.9rem' }}>
+      <nav className="breadcrumb-nav" aria-label="breadcrumb">
         <ol style={{ listStyle: 'none', padding: 0, display: 'flex', gap: '0.5rem', color: '#888' }}>
           <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Home</Link></li>
           <li>/</li>
