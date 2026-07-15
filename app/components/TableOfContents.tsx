@@ -28,7 +28,7 @@ export default function TableOfContents({ toc }: { toc: { id: string, title: str
   }, [toc]);
 
   return (
-    <aside style={{ position: 'sticky', top: '100px', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+    <aside className="toc-container" style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
       <h4 style={{ color: '#fff', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Table of Contents</h4>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {toc.map((item, idx) => {

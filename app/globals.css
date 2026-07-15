@@ -328,9 +328,19 @@ body {
   align-items: start;
 }
 
+.toc-container {
+  position: sticky;
+  top: 100px;
+}
+
 @media (max-width: 768px) {
   .guide-layout {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+  
+  .toc-container {
+    position: relative;
+    top: 0;
   }
 }

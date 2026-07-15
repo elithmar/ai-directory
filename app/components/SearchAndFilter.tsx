@@ -98,7 +98,6 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
     const searchVal = val.toLowerCase();
     const matches = tools.filter(t => 
       (t.name && t.name.toLowerCase().includes(searchVal)) || 
-      (t.description && t.description.toLowerCase().includes(searchVal)) || 
       (t.category && t.category.toLowerCase().includes(searchVal))
     );
     setPredictions(matches.slice(0, 5));
