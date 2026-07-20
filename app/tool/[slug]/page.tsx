@@ -117,7 +117,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       "priceCurrency": "USD"
     },
     "description": tool.description,
-    "url": `https://www.curatedailist.com/tool/${tool.slug}`
+    "url": `https://curatedailist.com/tool/${tool.slug}`
   };
 
   const breadcrumbJsonLd = {
@@ -127,12 +127,12 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": "https://www.curatedailist.com/"
+      "item": "https://curatedailist.com/"
     },{
       "@type": "ListItem",
       "position": 2,
       "name": tool.category || "Tools",
-      "item": `https://www.curatedailist.com/?category=${tool.category || ''}`
+      "item": `https://curatedailist.com/?category=${tool.category || ''}`
     },{
       "@type": "ListItem",
       "position": 3,

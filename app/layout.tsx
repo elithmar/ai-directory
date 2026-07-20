@@ -4,7 +4,7 @@ import CookieBanner from '@/components/CookieBanner';
 import ScrollToTop from './components/ScrollToTop';
 
 export const metadata = {
-  metadataBase: new URL('https://www.curatedailist.com'),
+  metadataBase: new URL('https://curatedailist.com'),
   title: 'Curated AI List | Discover the Best Artificial Intelligence Tools',
   description: 'The ultimate directory for discovering the best AI tools, softwares, and guides. Boost your productivity, marketing, and business with our curated AI list.',
   openGraph: {
@@ -28,10 +28,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Curated AI List",
-    "url": "https://www.curatedailist.com",
+    "url": "https://curatedailist.com",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://www.curatedailist.com/?q={search_term_string}",
+      "target": "https://curatedailist.com/?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };
