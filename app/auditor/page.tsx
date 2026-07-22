@@ -61,7 +61,8 @@ export default function AuditorPage() {
 
     try {
       // 1. Save Lead to Supabase (Ignore errors if table doesn't exist yet for demo)
-      await supabase.from('leads').insert([{ email, source: 'auditor', score }]).catch(() => console.log('Leads table not ready'));
+      const { error: insertError } = await supabase.from('leads').insert([{ email, source: 'auditor', score }]);
+      if (insertError) console.log('Leads table not ready or error:', insertError);
 
       // 2. Fetch 3 AI tools to recommend
       const selectedCategories = TRADITIONAL_TOOLS.filter(t => selectedTools.includes(t.id)).map(t => t.category);
