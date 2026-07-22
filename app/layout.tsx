@@ -54,6 +54,7 @@ export default function RootLayout({
               <span className="logo-text">Curated AI List</span>
             </a>
             <nav style={{ display: 'flex', gap: '1.5rem' }}>
+              <Link href="/auditor" style={{ color: '#10b981', textDecoration: 'none', fontWeight: 'bold' }}>Free Audit</Link>
               <Link href="/guides" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>Guides</Link>
               <Link href="/about" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>About</Link>
             </nav>
