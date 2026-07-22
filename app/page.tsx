@@ -34,6 +34,16 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         <h1>Curated AI List</h1>
         <p>Discover the latest high-leverage AI tools. Curated programmatically.</p>
         
+        {/* Auditor CTA Banner */}
+        <div style={{ margin: '2.5rem auto', padding: '2.5rem 2rem', maxWidth: '800px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '24px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '4px 12px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Free Tool</span>
+          <h2 style={{ fontSize: '2rem', marginBottom: '1rem', fontWeight: '800' }}>Is your team wasting 15h a week?</h2>
+          <p style={{ color: '#cbd5e1', fontSize: '1.1rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem auto', lineHeight: '1.6' }}>Take the 30-second AI Stack Audit. Select your legacy software and we'll instantly recommend the specific AI tools to automate your workflow.</p>
+          <Link href="/auditor" style={{ display: 'inline-block', padding: '1rem 2.5rem', background: '#10b981', color: '#fff', textDecoration: 'none', borderRadius: '50px', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)' }}>
+            Start Free Audit &rarr;
+          </Link>
+        </div>
+        
         {/* Interactive Search & Filter Client Component */}
         <SearchAndFilter tools={dbTools || []} initialQuery={searchParams.q} initialCategory={searchParams.category} />
       </section>
