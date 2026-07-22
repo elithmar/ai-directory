@@ -147,8 +147,8 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
       
       {/* Search Form with Dropdown */}
-      <div ref={searchRef} style={{ position: 'relative', width: '100%', maxWidth: '400px', marginTop: '2rem' }}>
-        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+      <div ref={searchRef} style={{ position: 'relative', width: '100%', maxWidth: '500px', margin: '0 auto 2rem auto' }}>
+        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '1rem', width: '100%', background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 0 20px rgba(74, 222, 128, 0.1)' }}>
           <input 
             type="text" 
             placeholder={placeholderText} 
@@ -157,15 +157,16 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
             onFocus={() => { if(query) setShowPredictions(true) }}
             style={{ 
               flex: 1, 
-              padding: '12px 24px', 
+              padding: '16px 24px', 
               borderRadius: '30px', 
-              border: '1px solid rgba(255,255,255,0.2)', 
-              background: 'rgba(255,255,255,0.05)', 
+              border: 'none', 
+              background: 'transparent', 
               color: '#fff',
-              outline: 'none'
+              outline: 'none',
+              fontSize: '1.1rem'
             }}
           />
-          <button type="submit" style={{ padding: '12px 24px', borderRadius: '30px', background: 'var(--accent)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
+          <button type="submit" style={{ padding: '0 32px', borderRadius: '30px', background: 'var(--accent)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem' }} className="btn-hover">
             Search
           </button>
         </form>
@@ -221,20 +222,36 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
               key={cat} 
               onClick={() => selectCategory(cat)}
               style={{
-                padding: '8px 16px', 
-                borderRadius: '20px', 
-                fontSize: '0.85rem',
+                padding: '12px 24px', 
+                borderRadius: '30px', 
+                fontSize: '1rem',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                 background: isSelected ? 'var(--accent)' : (isHighlighted ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.05)'),
-                color: isSelected ? '#fff' : (isHighlighted ? 'var(--primary)' : '#aaa'),
-                border: isHighlighted && !isSelected ? '1px solid var(--primary)' : '1px solid transparent',
+                color: isSelected ? '#000' : (isHighlighted ? 'var(--primary)' : '#aaa'),
+                border: isHighlighted && !isSelected ? '1px solid var(--primary)' : '1px solid rgba(255,255,255,0.05)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px'
+                gap: '8px',
+                fontWeight: isSelected ? 'bold' : 'normal',
+                boxShadow: isSelected ? '0 4px 15px rgba(74, 222, 128, 0.4)' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'var(--accent)';
+                  e.currentTarget.style.color = '#fff';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.borderColor = isHighlighted ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.color = isHighlighted ? 'var(--primary)' : '#aaa';
+                }
               }}
             >
-              <span>{getCategoryIcon(cat)}</span> {cat}
+              <span style={{ fontSize: '1.2rem' }}>{getCategoryIcon(cat)}</span> {cat}
             </button>
           )
         })}
