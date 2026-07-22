@@ -255,12 +255,35 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
             </button>
           )
         })}
-        {category && (
+        {(category || query) && (
           <button 
-            onClick={() => selectCategory(category)} 
-            style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '0.5rem' }}
+            onClick={() => {
+              setCategory('');
+              setQuery('');
+              setHighlightedCategory(null);
+              router.push('/');
+            }} 
+            style={{ 
+              padding: '12px 24px', 
+              borderRadius: '30px', 
+              background: 'transparent', 
+              border: '1px solid rgba(255,100,100,0.5)', 
+              color: '#ff8888', 
+              cursor: 'pointer', 
+              fontSize: '1rem', 
+              marginLeft: '0.5rem',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,100,100,0.1)';
+              e.currentTarget.style.color = '#ffaaaa';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#ff8888';
+            }}
           >
-            Clear Filter
+            ❌ Clear Filters
           </button>
         )}
       </div>

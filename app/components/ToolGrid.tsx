@@ -43,18 +43,24 @@ export default function ToolGrid({
 
   const loadMore = async () => {
     setLoading(true);
-    const offset = tools.length; // We start fetching from the current length
-    // Remember to fetch tools.length + 6
+    let offset = tools.length; // We start fetching from the current length
+    
+    // If we are on the main page, the DB offset must be +1 because the featured tool took 1 slot
+    if (!searchQuery && !categoryQuery) {
+      offset += 1;
+    }
+
+    // Remember to fetch 6 items
     let query = supabase.from('tools').select('*').order('created_at', { ascending: false });
 
     if (searchQuery) {
-      query = query.ilike('name', `%${searchQuery}%`);
+      query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
     }
     if (categoryQuery) {
       query = query.eq('category', categoryQuery);
     }
 
-    // Supabase range is inclusive, e.g. range(12, 23) gets 12 items
+    // Supabase range is inclusive
     query = query.range(offset, offset + 5);
 
     const { data: nextTools, error } = await query;

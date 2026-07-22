@@ -20,8 +20,8 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
     query = query.eq('category', searchParams.category);
   }
 
-  // Límite reducido a 6 para que la página no sea tan larga
-  query = query.limit(6);
+  // Límite de 7: 1 para Featured Tool + 6 para el Grid inicial
+  query = query.limit(7);
 
   const { data: dbTools } = await query;
 

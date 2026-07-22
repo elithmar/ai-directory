@@ -97,6 +97,10 @@ export default function AuditorPage() {
   return (
     <main className="container" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 1rem' }}>
       
+      <div style={{ width: '100%', maxWidth: '800px', marginBottom: '2rem' }}>
+        <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 'bold' }}>&larr; Back to Directory</Link>
+      </div>
+
       <div style={{ maxWidth: '800px', width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '3rem', position: 'relative', overflow: 'hidden' }}>
         
         {/* STAGE 1: SELECT */}
