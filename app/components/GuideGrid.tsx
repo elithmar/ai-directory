@@ -1,8 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Helper to get a generative icon based on title
 function getIconForTitle(title: string) {
@@ -35,8 +39,6 @@ export default function GuideGrid({ initialGuides }: { initialGuides: any[] }) {
   const [activeTheme, setActiveTheme] = useState('All');
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialGuides.length >= 9);
-  
-  const supabase = createClientComponentClient();
 
   const handleFilter = async (themeLabel: string) => {
     setActiveTheme(themeLabel);
