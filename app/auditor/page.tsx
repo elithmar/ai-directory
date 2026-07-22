@@ -117,38 +117,59 @@ export default function AuditorPage() {
                   <div 
                     key={tool.id}
                     onClick={() => toggleTool(tool.id)}
+                    className="auditor-card"
                     style={{ 
-                      background: isSelected ? 'rgba(16, 185, 129, 0.2)' : 'rgba(0,0,0,0.3)',
-                      border: `1px solid ${isSelected ? '#10b981' : 'rgba(255,255,255,0.1)'}`,
+                      background: isSelected ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${isSelected ? '#10b981' : 'rgba(255,255,255,0.05)'}`,
                       padding: '1.5rem 1rem',
                       borderRadius: '16px',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                      transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                      transform: isSelected ? 'scale(1.05) translateY(-5px)' : 'scale(1)',
+                      boxShadow: isSelected ? '0 10px 30px rgba(16, 185, 129, 0.2)' : 'none',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.border = '1px solid rgba(16, 185, 129, 0.5)';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.border = '1px solid rgba(255,255,255,0.05)';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                      }
                     }}
                   >
-                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{tool.icon}</div>
-                    <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: isSelected ? '#fff' : '#aaa' }}>{tool.name}</div>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.8rem', filter: isSelected ? 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.5))' : 'none', transition: 'all 0.3s' }}>{tool.icon}</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '0.95rem', color: isSelected ? '#fff' : '#aaa' }}>{tool.name}</div>
                   </div>
                 );
               })}
             </div>
 
-            <button 
-              onClick={startScan}
-              disabled={selectedTools.length === 0}
-              style={{
-                background: selectedTools.length > 0 ? 'linear-gradient(45deg, var(--accent), #10b981)' : 'rgba(255,255,255,0.1)',
-                color: selectedTools.length > 0 ? '#fff' : '#666',
-                padding: '1rem 3rem',
-                border: 'none',
-                borderRadius: '50px',
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
-                cursor: selectedTools.length > 0 ? 'pointer' : 'not-allowed',
-                transition: 'all 0.3s ease'
-              }}
-            >
+              <button 
+                onClick={startScan}
+                disabled={selectedTools.length === 0}
+                className={selectedTools.length > 0 ? 'btn-hover' : ''}
+                style={{
+                  background: selectedTools.length > 0 ? 'linear-gradient(90deg, var(--accent), #34d399)' : 'rgba(255,255,255,0.05)',
+                  color: selectedTools.length > 0 ? '#000' : '#555',
+                  padding: '1.2rem 3.5rem',
+                  border: 'none',
+                  borderRadius: '50px',
+                  fontSize: '1.2rem',
+                  fontWeight: '800',
+                  cursor: selectedTools.length > 0 ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.3s ease',
+                  boxShadow: selectedTools.length > 0 ? '0 10px 25px rgba(16, 185, 129, 0.4)' : 'none',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
               Analyze My Stack &rarr;
             </button>
           </div>
@@ -156,13 +177,16 @@ export default function AuditorPage() {
 
         {/* STAGE 2: SCANNING */}
         {stage === 'scan' && (
-          <div style={{ textAlign: 'center', padding: '4rem 0', animation: 'fadeIn 0.5s ease' }}>
-            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Scanning for Inefficiencies...</h2>
-            <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: `${scanProgress}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), #10b981)', transition: 'width 0.1s linear' }} />
+          <div style={{ textAlign: 'center', padding: '6rem 0', animation: 'fadeIn 0.5s ease' }}>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', fontWeight: '800', background: 'linear-gradient(90deg, #fff, #aaa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Scanning for Inefficiencies...</h2>
+            
+            <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)', position: 'relative' }}>
+              <div style={{ width: `${scanProgress}%`, height: '100%', background: 'linear-gradient(90deg, #10b981, var(--accent), #fff)', transition: 'width 0.1s linear', boxShadow: '0 0 20px rgba(16, 185, 129, 0.8)' }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)', animation: 'shimmer 1.5s infinite' }} />
             </div>
-            <p style={{ marginTop: '2rem', color: '#888', fontFamily: 'monospace' }}>
-              {scanProgress < 30 ? 'Analyzing current workflows...' : scanProgress < 70 ? 'Identifying legacy software bottlenecks...' : 'Calculating AI Readiness Score...'}
+            
+            <p style={{ marginTop: '2.5rem', color: 'var(--accent)', fontFamily: 'monospace', fontSize: '1.2rem', letterSpacing: '1px' }}>
+              {scanProgress < 30 ? '> Analyzing legacy workflow nodes...' : scanProgress < 70 ? '> Identifying critical automation gaps...' : '> Synthesizing AI Readiness Matrix...'}
             </p>
           </div>
         )}
@@ -170,32 +194,42 @@ export default function AuditorPage() {
         {/* STAGE 3: EMAIL GATE */}
         {stage === 'email' && (
           <div style={{ textAlign: 'center', animation: 'fadeIn 0.5s ease' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', border: '2px solid rgba(239, 68, 68, 0.5)', color: '#ef4444', fontSize: '3rem', fontWeight: 'bold', margin: '0 auto 2rem auto' }}>
+            <div style={{ 
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', 
+              width: '140px', height: '140px', borderRadius: '50%', 
+              background: 'rgba(239, 68, 68, 0.05)', border: '2px solid rgba(239, 68, 68, 0.8)', 
+              color: '#ef4444', fontSize: '4rem', fontWeight: '900', margin: '0 auto 2.5rem auto',
+              boxShadow: '0 0 40px rgba(239, 68, 68, 0.4)',
+              animation: 'pulseGlowRed 1.5s infinite alternate'
+            }}>
               {score}
             </div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Dangerously Low AI Score</h2>
-            <p style={{ fontSize: '1.2rem', color: '#aaa', marginBottom: '2rem' }}>
-              Based on your stack, your team is likely wasting <strong>15-20 hours a week</strong> on manual tasks that AI can automate right now.
+            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', fontWeight: '800', letterSpacing: '-1px' }}>Dangerously Low AI Score</h2>
+            <p style={{ fontSize: '1.3rem', color: '#aaa', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: '1.6' }}>
+              Based on your stack, your team is likely wasting <strong style={{ color: '#ef4444' }}>15-20 hours a week</strong> on manual tasks that AI can automate right now.
             </p>
             
-            <div style={{ background: 'rgba(0,0,0,0.4)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <h3 style={{ marginBottom: '1.5rem', fontSize: '1.3rem' }}>Unlock Your Free Automation Report</h3>
-              <p style={{ color: '#888', marginBottom: '2rem', fontSize: '0.9rem' }}>We found 3 specific AI tools that can instantly replace your legacy software. Enter your email to view your personalized results.</p>
+            <div style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), transparent)', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)' }}>
+              <h3 style={{ marginBottom: '1rem', fontSize: '1.6rem', fontWeight: '800' }}>Unlock Your Free Automation Report</h3>
+              <p style={{ color: '#888', marginBottom: '2.5rem', fontSize: '1.05rem' }}>We found 3 specific AI tools that can instantly replace your legacy software. Enter your work email to view your personalized results.</p>
               
-              <form onSubmit={submitEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px', margin: '0 auto' }}>
-                <div style={{ display: 'flex', gap: '1rem' }}>
+              <form onSubmit={submitEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', maxWidth: '450px', margin: '0 auto' }}>
+                <div style={{ display: 'flex', gap: '0.8rem' }}>
                   <input 
                     type="email" 
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="Enter your work email" 
                     required
-                    style={{ flex: 1, padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem' }}
+                    style={{ flex: 1, padding: '1.2rem 1.5rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: '#fff', fontSize: '1.05rem', outline: 'none', transition: 'all 0.3s' }}
+                    onFocus={(e) => { e.currentTarget.style.border = '1px solid var(--accent)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.2)'; }}
+                    onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = 'none'; }}
                   />
                   <button 
                     type="submit"
                     disabled={loading || !consent}
-                    style={{ background: consent ? 'var(--accent)' : 'rgba(255,255,255,0.1)', color: consent ? '#fff' : '#666', padding: '0 1.5rem', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: consent ? 'pointer' : 'not-allowed', transition: 'all 0.2s' }}
+                    className={consent ? 'btn-hover' : ''}
+                    style={{ background: consent ? 'linear-gradient(90deg, var(--accent), #34d399)' : 'rgba(255,255,255,0.05)', color: consent ? '#000' : '#555', padding: '0 2.5rem', border: 'none', borderRadius: '50px', fontWeight: '800', fontSize: '1.05rem', cursor: consent ? 'pointer' : 'not-allowed', transition: 'all 0.3s', boxShadow: consent ? '0 5px 15px rgba(16, 185, 129, 0.3)' : 'none' }}
                   >
                     {loading ? '...' : 'Unlock'}
                   </button>
@@ -222,21 +256,40 @@ export default function AuditorPage() {
         {stage === 'results' && (
           <div style={{ animation: 'fadeIn 0.5s ease' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '4px 12px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 'bold' }}>Report Unlocked</span>
-              <h2 style={{ fontSize: '2.5rem', marginTop: '1rem', marginBottom: '1rem' }}>Your Missing AI Tools</h2>
-              <p style={{ color: '#888', fontSize: '1.1rem' }}>Integrate these into your workflow this week to automate your legacy tasks.</p>
+              <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Report Unlocked</span>
+              <h2 style={{ fontSize: '3rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: '800', letterSpacing: '-1px' }}>Your Missing AI Tools</h2>
+              <p style={{ color: '#aaa', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto' }}>Integrate these into your workflow this week to automate your legacy tasks.</p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
               {recommendations.map(tool => (
                 <Link key={tool.id} href={`/tool/${tool.slug}`} style={{ textDecoration: 'none' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', background: 'rgba(0,0,0,0.3)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.2s ease' }} className="tool-card-hover">
-                    <div style={{ width: '60px', height: '60px', borderRadius: '12px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>✨</div>
+                  <div 
+                    style={{ 
+                      display: 'flex', alignItems: 'center', gap: '1.5rem', 
+                      background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', 
+                      border: '1px solid rgba(255,255,255,0.05)', transition: 'all 0.3s ease',
+                      backdropFilter: 'blur(10px)'
+                    }} 
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateX(10px)';
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                      e.currentTarget.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+                      e.currentTarget.style.boxShadow = '0 5px 20px rgba(16, 185, 129, 0.15)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateX(0)';
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                      e.currentTarget.style.border = '1px solid rgba(255,255,255,0.05)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    <div style={{ width: '70px', height: '70px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05))', border: '1px solid rgba(16, 185, 129, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', boxShadow: 'inset 0 0 10px rgba(16, 185, 129, 0.2)' }}>✨</div>
                     <div style={{ flex: 1 }}>
-                      <h4 style={{ fontSize: '1.3rem', color: '#fff', marginBottom: '0.2rem' }}>{tool.name}</h4>
-                      <p style={{ color: '#aaa', fontSize: '0.9rem' }}>{tool.description?.substring(0, 80)}...</p>
+                      <h4 style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '0.4rem', fontWeight: 'bold' }}>{tool.name}</h4>
+                      <p style={{ color: '#aaa', fontSize: '0.95rem', lineHeight: '1.5' }}>{tool.description?.substring(0, 100)}...</p>
                     </div>
-                    <div style={{ color: 'var(--accent)', fontSize: '1.5rem' }}>&rarr;</div>
+                    <div style={{ color: 'var(--accent)', fontSize: '1.5rem', padding: '0 1rem' }}>&rarr;</div>
                   </div>
                 </Link>
               ))}
