@@ -33,18 +33,18 @@ export default function ToolGrid({
 }) {
   const [tools, setTools] = useState(initialTools);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialTools.length === 12); // If initial is 12, there MIGHT be more
+  const [hasMore, setHasMore] = useState(initialTools.length >= 6); // If initial is >= 6, there MIGHT be more
 
   // CRITICAL FIX: Update state when user clicks a filter (URL changes)
   useEffect(() => {
     setTools(initialTools);
-    setHasMore(initialTools.length >= 12);
+    setHasMore(initialTools.length >= 6);
   }, [initialTools]);
 
   const loadMore = async () => {
     setLoading(true);
     const offset = tools.length; // We start fetching from the current length
-    // Remember to fetch tools.length + 12
+    // Remember to fetch tools.length + 6
     let query = supabase.from('tools').select('*').order('created_at', { ascending: false });
 
     if (searchQuery) {
@@ -55,13 +55,13 @@ export default function ToolGrid({
     }
 
     // Supabase range is inclusive, e.g. range(12, 23) gets 12 items
-    query = query.range(offset, offset + 11);
+    query = query.range(offset, offset + 5);
 
     const { data: nextTools, error } = await query;
     
     if (nextTools && nextTools.length > 0) {
       setTools([...tools, ...nextTools]);
-      if (nextTools.length < 12) {
+      if (nextTools.length < 6) {
         setHasMore(false); // Reached the end
       }
     } else {

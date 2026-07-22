@@ -20,8 +20,8 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
     query = query.eq('category', searchParams.category);
   }
 
-  // Límite de 12 para la paginación de la Fase 2 (Performance 100/100)
-  query = query.limit(12);
+  // Límite reducido a 6 para que la página no sea tan larga
+  query = query.limit(6);
 
   const { data: dbTools } = await query;
 
