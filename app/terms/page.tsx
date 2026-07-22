@@ -25,14 +25,18 @@ export default function TermsOfService() {
           <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>3. Affiliate Links & Endorsements</h2>
           <p>This directory features reviews and listings of third-party software tools. We participate in various affiliate marketing programs, which means we may get paid commissions on purchases made through our links to vendor sites. Our reviews and recommendations are independent, but you should assume any link to a product is an affiliate link.</p>
         </section>
+        <section>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>4. Electronic Communications (GDPR)</h2>
+          <p>By providing your email address via our tools or forms, you consent to receive electronic communications from us. You agree that any notices, agreements, disclosures, or other communications that we send to you electronically will satisfy any legal communication requirements, including that such communications be in writing.</p>
+        </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>4. Limitations of Liability</h2>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>5. Limitations of Liability</h2>
           <p>In no event shall we or our suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on this website, even if we or an authorized representative has been notified orally or in writing of the possibility of such damage.</p>
         </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>5. Revisions and Errata</h2>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>6. Revisions and Errata</h2>
           <p>The materials appearing on this website could include technical, typographical, or photographic errors. We do not warrant that any of the materials on its website are accurate, complete, or current. We may make changes to the materials contained on its website at any time without notice.</p>
         </section>
       </div>

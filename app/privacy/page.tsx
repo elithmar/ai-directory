@@ -24,19 +24,23 @@ export default function PrivacyPolicy() {
             <li><strong>Usage Data</strong> includes information about how you use our website, products and services.</li>
           </ul>
         </section>
+        <section>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>3. Email Collection & Marketing (GDPR)</h2>
+          <p>If you choose to use our Free Audit tool or subscribe to our newsletter, we will collect your email address. We use this to send you your results and occasional marketing emails about new AI tools. Your data is stored securely. We rely on your explicit consent as the lawful basis for processing. You may withdraw your consent and unsubscribe at any time by clicking the link at the bottom of our emails.</p>
+        </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>3. Affiliate Disclosure</h2>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>4. Affiliate Disclosure</h2>
           <p>Some of the links on this website are affiliate links, which means that we may earn a commission if you click on the link or make a purchase using the link. When you make a purchase, the price you pay will be the same whether you use the affiliate link or go directly to the vendor's website using a non-affiliate link.</p>
         </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>4. Cookies</h2>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>5. Cookies</h2>
           <p>You can set your browser to refuse all or some browser cookies, or to alert you when websites set or access cookies. If you disable or refuse cookies, please note that some parts of this website may become inaccessible or not function properly.</p>
         </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>5. Third-Party Links</h2>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>6. Third-Party Links</h2>
           <p>This website may include links to third-party websites, plug-ins and applications. Clicking on those links or enabling those connections may allow third parties to collect or share data about you. We do not control these third-party websites and are not responsible for their privacy statements.</p>
         </section>
       </div>

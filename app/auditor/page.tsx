@@ -23,6 +23,7 @@ export default function AuditorPage() {
   const [stage, setStage] = useState<'select' | 'scan' | 'email' | 'results'>('select');
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState(0);
   const [recommendations, setRecommendations] = useState<any[]>([]);
@@ -177,22 +178,37 @@ export default function AuditorPage() {
               <h3 style={{ marginBottom: '1.5rem', fontSize: '1.3rem' }}>Unlock Your Free Automation Report</h3>
               <p style={{ color: '#888', marginBottom: '2rem', fontSize: '0.9rem' }}>We found 3 specific AI tools that can instantly replace your legacy software. Enter your email to view your personalized results.</p>
               
-              <form onSubmit={submitEmail} style={{ display: 'flex', gap: '1rem', maxWidth: '400px', margin: '0 auto' }}>
-                <input 
-                  type="email" 
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="Enter your work email" 
-                  required
-                  style={{ flex: 1, padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem' }}
-                />
-                <button 
-                  type="submit"
-                  disabled={loading}
-                  style={{ background: 'var(--accent)', color: '#fff', padding: '0 1.5rem', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-                >
-                  {loading ? '...' : 'Unlock'}
-                </button>
+              <form onSubmit={submitEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px', margin: '0 auto' }}>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Enter your work email" 
+                    required
+                    style={{ flex: 1, padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem' }}
+                  />
+                  <button 
+                    type="submit"
+                    disabled={loading || !consent}
+                    style={{ background: consent ? 'var(--accent)' : 'rgba(255,255,255,0.1)', color: consent ? '#fff' : '#666', padding: '0 1.5rem', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: consent ? 'pointer' : 'not-allowed', transition: 'all 0.2s' }}
+                  >
+                    {loading ? '...' : 'Unlock'}
+                  </button>
+                </div>
+                
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8rem', color: '#888', textAlign: 'left', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={consent}
+                    onChange={e => setConsent(e.target.checked)}
+                    required
+                    style={{ marginTop: '0.2rem' }}
+                  />
+                  <span>
+                    I agree to the <Link href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Privacy Policy</Link> and consent to receive emails regarding AI tools and updates. You can unsubscribe at any time.
+                  </span>
+                </label>
               </form>
             </div>
           </div>
