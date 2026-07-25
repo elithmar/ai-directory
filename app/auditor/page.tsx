@@ -17,6 +17,8 @@ const TRADITIONAL_TOOLS = [
   { id: 'excel', name: 'Excel / Sheets', category: 'Productivity', icon: '📊' },
   { id: 'premiere', name: 'Premiere Pro', category: 'Video', icon: '🎬' },
   { id: 'audacity', name: 'Audacity', category: 'Audio', icon: '🎙️' },
+  { id: 'notion', name: 'Notion / Asana', category: 'Productivity', icon: '📝' },
+  { id: 'other', name: 'Other / Custom', category: 'General', icon: '🛠️' },
 ];
 
 export default function AuditorPage() {
