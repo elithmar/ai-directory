@@ -31,7 +31,8 @@ const THEMES = [
   { label: '🏥 Medical', keywords: ['medical', 'patient', 'health', 'clinical', 'genomic', 'biomedical'] },
   { label: '📈 Finance', keywords: ['finance', 'trading', 'money', 'business'] },
   { label: '🎯 Marketing', keywords: ['marketing', 'sales', 'brand', 'content'] },
-  { label: '🔬 Research', keywords: ['research', 'science', 'data', 'hypothesis'] }
+  { label: '🔬 Research', keywords: ['research', 'science', 'data', 'hypothesis'] },   
+  { label: '🧠 General', keywords: ['learning', 'portfolio', 'analysis', 'behavior', 'intelligence', 'cognitive', 'storytelling', 'business'] }
 ];
 
 export default function GuideGrid({ initialGuides }: { initialGuides: any[] }) {
