@@ -1,5 +1,6 @@
 import './globals.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import CookieBanner from '@/components/CookieBanner';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -49,10 +50,10 @@ export default function RootLayout({
       <body>
         <header className="header">
           <div className="container header-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <a href="/" className="logo-link">
-              <img src="/logo.png" alt="Curated AI List Logo" className="logo-image" />
+            <Link href="/" className="logo-link">
+              <Image src="/logo.png" alt="Curated AI List Logo" width={40} height={40} className="logo-image" />
               <span className="logo-text">Curated AI List</span>
-            </a>
+            </Link>
             <nav style={{ display: 'flex', gap: '1.5rem' }}>
               <Link href="/auditor" style={{ color: '#10b981', textDecoration: 'none', fontWeight: 'bold' }}>Free Audit</Link>
               <Link href="/guides" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>Guides</Link>
