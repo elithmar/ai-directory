@@ -25,11 +25,13 @@ const getCategoryIcon = (category: string) => {
 export default function ToolGrid({ 
   initialTools, 
   searchQuery = '', 
-  categoryQuery = '' 
+  categoryQuery = '',
+  pricingQuery = ''
 }: { 
   initialTools: any[], 
   searchQuery?: string, 
-  categoryQuery?: string 
+  categoryQuery?: string,
+  pricingQuery?: string
 }) {
   const [tools, setTools] = useState(initialTools);
   const [loading, setLoading] = useState(false);
