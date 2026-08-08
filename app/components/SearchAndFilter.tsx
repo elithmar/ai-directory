@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function SearchAndFilter({ tools, initialQuery = '', initialCategory = '' }: { tools: any[], initialQuery?: string, initialCategory?: string }) {
+export default function SearchAndFilter({ tools, initialQuery = '', initialCategory = '', initialPricing = '' }: { tools: any[], initialQuery?: string, initialCategory?: string, initialPricing?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState(initialCategory);
+  const [pricing, setPricing] = useState(initialPricing);
   const [predictions, setPredictions] = useState<any[]>([]);
   const [showPredictions, setShowPredictions] = useState(false);
   const [highlightedCategory, setHighlightedCategory] = useState<string | null>(initialCategory || null);
@@ -15,6 +16,7 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
   const searchRef = useRef<HTMLDivElement>(null);
 
   const categories = ['Video', 'Audio', 'Marketing', 'Productivity', 'Design'];
+  const pricingModels = ['Free', 'Freemium', 'Paid', 'Open Source'];
 
   // Typewriter effect for placeholder
   useEffect(() => {
@@ -76,10 +78,16 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setShowPredictions(false);
-    if (query.trim() === '') {
-      router.push('/');
+    
+    const params = new URLSearchParams();
+    if (query.trim()) params.append('q', query.trim());
+    if (category) params.append('category', category);
+    if (pricing) params.append('pricing', pricing);
+    
+    if (params.toString()) {
+      router.push(`/?${params.toString()}`);
     } else {
-      router.push(`/?q=${encodeURIComponent(query)}`);
+      router.push('/');
     }
   };
 
@@ -116,17 +124,32 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
     router.push(`/tool/${slug}`);
   };
 
-  const selectCategory = (cat: string) => {
-    if (category === cat) {
-      setCategory('');
-      setHighlightedCategory(null);
-      router.push('/');
+  const updateFilters = (newCategory: string, newPricing: string, newQuery: string = '') => {
+    const params = new URLSearchParams();
+    if (newQuery) params.append('q', newQuery);
+    if (newCategory) params.append('category', newCategory);
+    if (newPricing) params.append('pricing', newPricing);
+    
+    if (params.toString()) {
+      router.push(`/?${params.toString()}`);
     } else {
-      setCategory(cat);
-      setHighlightedCategory(cat);
-      setQuery('');
-      router.push(`/?category=${encodeURIComponent(cat)}`);
+      router.push('/');
     }
+  };
+
+  const selectCategory = (cat: string) => {
+    const newCat = category === cat ? '' : cat;
+    setCategory(newCat);
+    setHighlightedCategory(newCat || null);
+    setQuery('');
+    updateFilters(newCat, pricing, '');
+  };
+
+  const selectPricing = (price: string) => {
+    const newPrice = pricing === price ? '' : price;
+    setPricing(newPrice);
+    setQuery('');
+    updateFilters(category, newPrice, '');
   };
 
   const getCategoryIcon = (category: string) => {
@@ -255,22 +278,63 @@ export default function SearchAndFilter({ tools, initialQuery = '', initialCateg
             </button>
           )
         })}
-        {(category || query) && (
+      </div>
+      
+      {/* Pricing Filters */}
+      <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {pricingModels.map(price => {
+          const isSelected = pricing === price;
+          return (
+            <button 
+              key={price} 
+              onClick={() => selectPricing(price)}
+              style={{
+                padding: '8px 16px', 
+                borderRadius: '20px', 
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                background: isSelected ? (price === 'Free' ? '#10b981' : price === 'Paid' ? '#ef4444' : '#3b82f6') : 'rgba(255,255,255,0.03)',
+                color: isSelected ? '#fff' : '#888',
+                border: `1px solid ${isSelected ? 'transparent' : 'rgba(255,255,255,0.1)'}`,
+                fontWeight: isSelected ? 'bold' : 'normal',
+                boxShadow: isSelected ? `0 4px 15px ${price === 'Free' ? 'rgba(16,185,129,0.4)' : price === 'Paid' ? 'rgba(239,68,68,0.4)' : 'rgba(59,130,246,0.4)'}` : 'none'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                  e.currentTarget.style.color = '#fff';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                  e.currentTarget.style.color = '#888';
+                }
+              }}
+            >
+              {price}
+            </button>
+          )
+        })}
+        
+        {(category || query || pricing) && (
           <button 
             onClick={() => {
               setCategory('');
               setQuery('');
+              setPricing('');
               setHighlightedCategory(null);
               router.push('/');
             }} 
             style={{ 
-              padding: '12px 24px', 
-              borderRadius: '30px', 
+              padding: '8px 16px', 
+              borderRadius: '20px', 
               background: 'transparent', 
               border: '1px solid rgba(255,100,100,0.5)', 
               color: '#ff8888', 
               cursor: 'pointer', 
-              fontSize: '1rem', 
+              fontSize: '0.9rem', 
               marginLeft: '0.5rem',
               transition: 'all 0.3s ease'
             }}
