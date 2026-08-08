@@ -17,8 +17,6 @@ const TRADITIONAL_TOOLS = [
   { id: 'excel', name: 'Excel / Sheets', category: 'Productivity', icon: '📊' },
   { id: 'premiere', name: 'Premiere Pro', category: 'Video', icon: '🎬' },
   { id: 'audacity', name: 'Audacity', category: 'Audio', icon: '🎙️' },
-  { id: 'notion', name: 'Notion / Asana', category: 'Productivity', icon: '📝' },
-  { id: 'other', name: 'Other / Custom', category: 'General', icon: '🛠️' },
 ];
 
 export default function AuditorPage() {
@@ -37,7 +35,7 @@ export default function AuditorPage() {
     );
   };
 
-  const startScan = () => {
+  const startScan = async () => {
     if (selectedTools.length === 0) return;
     setStage('scan');
     
@@ -45,29 +43,9 @@ export default function AuditorPage() {
     const calculatedScore = Math.max(15, 100 - (selectedTools.length * 15) + Math.floor(Math.random() * 10));
     setScore(calculatedScore);
 
-    // Fake scanning animation
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 5;
-      setScanProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => setStage('email'), 500);
-      }
-    }, 100);
-  };
-
-  const submitEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setLoading(true);
-
+    // Fetch recommendations silently during scan
+    let fetchedTools: any[] = [];
     try {
-      // 1. Save Lead to Supabase (Ignore errors if table doesn't exist yet for demo)
-      const { error: insertError } = await supabase.from('leads').insert([{ email, source: 'auditor', score }]);
-      if (insertError) console.log('Leads table not ready or error:', insertError);
-
-      // 2. Fetch 3 AI tools to recommend
       const selectedCategories = TRADITIONAL_TOOLS.filter(t => selectedTools.includes(t.id)).map(t => t.category);
       
       const { data: tools } = await supabase
@@ -77,20 +55,26 @@ export default function AuditorPage() {
         .limit(3);
 
       if (tools && tools.length > 0) {
-        setRecommendations(tools);
+        fetchedTools = tools;
       } else {
-        // Fallback if no matching tools
         const { data: fallback } = await supabase.from('tools').select('*').limit(3);
-        setRecommendations(fallback || []);
+        fetchedTools = fallback || [];
       }
-      
-      setStage('results');
     } catch (error) {
       console.error(error);
-      setStage('results'); // Show results anyway
-    } finally {
-      setLoading(false);
     }
+
+    // Fake scanning animation
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 5;
+      setScanProgress(progress);
+      if (progress >= 100) {
+        clearInterval(interval);
+        setRecommendations(fetchedTools);
+        setTimeout(() => setStage('results'), 500);
+      }
+    }, 100);
   };
 
   const shareText = `My company's AI Readiness Score is just ${score}/100! 🤯\n\nI just ran the free AI Stack Auditor and found 3 AI tools to replace my outdated software and save 15h a week.\n\nCheck your score here:`;
@@ -193,74 +177,25 @@ export default function AuditorPage() {
           </div>
         )}
 
-        {/* STAGE 3: EMAIL GATE */}
-        {stage === 'email' && (
-          <div style={{ textAlign: 'center', animation: 'fadeIn 0.5s ease' }}>
-            <div style={{ 
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', 
-              width: '140px', height: '140px', borderRadius: '50%', 
-              background: 'rgba(239, 68, 68, 0.05)', border: '2px solid rgba(239, 68, 68, 0.8)', 
-              color: '#ef4444', fontSize: '4rem', fontWeight: '900', margin: '0 auto 2.5rem auto',
-              boxShadow: '0 0 40px rgba(239, 68, 68, 0.4)',
-              animation: 'pulseGlowRed 1.5s infinite alternate'
-            }}>
-              {score}
-            </div>
-            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', fontWeight: '800', letterSpacing: '-1px' }}>Dangerously Low AI Score</h2>
-            <p style={{ fontSize: '1.3rem', color: '#aaa', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: '1.6' }}>
-              Based on your stack, your team is likely wasting <strong style={{ color: '#ef4444' }}>15-20 hours a week</strong> on manual tasks that AI can automate right now.
-            </p>
-            
-            <div style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), transparent)', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)' }}>
-              <h3 style={{ marginBottom: '1rem', fontSize: '1.6rem', fontWeight: '800' }}>Unlock Your Free Automation Report</h3>
-              <p style={{ color: '#888', marginBottom: '2.5rem', fontSize: '1.05rem' }}>We found 3 specific AI tools that can instantly replace your legacy software. Enter your work email to view your personalized results.</p>
-              
-              <form onSubmit={submitEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', maxWidth: '450px', margin: '0 auto' }}>
-                <div style={{ display: 'flex', gap: '0.8rem' }}>
-                  <input 
-                    type="email" 
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="Enter your work email" 
-                    required
-                    style={{ flex: 1, padding: '1.2rem 1.5rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: '#fff', fontSize: '1.05rem', outline: 'none', transition: 'all 0.3s' }}
-                    onFocus={(e) => { e.currentTarget.style.border = '1px solid var(--accent)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.2)'; }}
-                    onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = 'none'; }}
-                  />
-                  <button 
-                    type="submit"
-                    disabled={loading || !consent}
-                    className={consent ? 'btn-hover' : ''}
-                    style={{ background: consent ? 'linear-gradient(90deg, var(--accent), #34d399)' : 'rgba(255,255,255,0.05)', color: consent ? '#000' : '#555', padding: '0 2.5rem', border: 'none', borderRadius: '50px', fontWeight: '800', fontSize: '1.05rem', cursor: consent ? 'pointer' : 'not-allowed', transition: 'all 0.3s', boxShadow: consent ? '0 5px 15px rgba(16, 185, 129, 0.3)' : 'none' }}
-                  >
-                    {loading ? '...' : 'Unlock'}
-                  </button>
-                </div>
-                
-                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8rem', color: '#888', textAlign: 'left', cursor: 'pointer' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={consent}
-                    onChange={e => setConsent(e.target.checked)}
-                    required
-                    style={{ marginTop: '0.2rem' }}
-                  />
-                  <span>
-                    I agree to the <Link href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Privacy Policy</Link> and consent to receive emails regarding AI tools and updates. You can unsubscribe at any time.
-                  </span>
-                </label>
-              </form>
-            </div>
-          </div>
-        )}
-
         {/* STAGE 4: RESULTS */}
         {stage === 'results' && (
           <div style={{ animation: 'fadeIn 0.5s ease' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Report Unlocked</span>
-              <h2 style={{ fontSize: '3rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: '800', letterSpacing: '-1px' }}>Your Missing AI Tools</h2>
-              <p style={{ color: '#aaa', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto' }}>Integrate these into your workflow this week to automate your legacy tasks.</p>
+              <div style={{ 
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', 
+                width: '120px', height: '120px', borderRadius: '50%', 
+                background: score < 50 ? 'rgba(239, 68, 68, 0.05)' : 'rgba(16, 185, 129, 0.05)', 
+                border: `2px solid ${score < 50 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(16, 185, 129, 0.8)'}`, 
+                color: score < 50 ? '#ef4444' : '#10b981', 
+                fontSize: '3rem', fontWeight: '900', margin: '0 auto 1.5rem auto',
+                boxShadow: score < 50 ? '0 0 40px rgba(239, 68, 68, 0.4)' : '0 0 40px rgba(16, 185, 129, 0.4)',
+              }}>
+                {score}
+              </div>
+              <h2 style={{ fontSize: '3rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: '800', letterSpacing: '-1px' }}>Your AI Readiness Score</h2>
+              <p style={{ color: '#aaa', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
+                Based on your stack, your team is likely wasting manual hours. Integrate these AI tools to automate your workflow.
+              </p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
