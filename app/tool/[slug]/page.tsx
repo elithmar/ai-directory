@@ -79,14 +79,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     );
   }
 
-  // Fetch deep review data
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('tool_id', tool.id)
-    .limit(1);
-  
-  const review = reviews?.[0];
+  const review = tool.review_data || null;
 
   let relatedToolsDb = null;
   if (tool.category) {
