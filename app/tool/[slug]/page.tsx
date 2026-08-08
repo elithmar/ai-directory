@@ -161,8 +161,12 @@ export default async function ToolPage({ params }: { params: { slug: string } })
         </ol>
       </nav>
       
-      <article className="tool-detail">
-        <header style={{ marginBottom: '3rem' }}>
+      <article className="tool-detail" style={{ position: 'relative' }}>
+        {/* Background Glow Orbs for Glassmorphism Effect */}
+        <div style={{ position: 'absolute', top: '10%', left: '-10%', width: '40%', height: '40%', background: 'var(--accent)', opacity: '0.1', filter: 'blur(100px)', zIndex: '-1', borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', bottom: '20%', right: '-10%', width: '30%', height: '30%', background: '#10b981', opacity: '0.1', filter: 'blur(100px)', zIndex: '-1', borderRadius: '50%' }}></div>
+
+        <header style={{ marginBottom: '3rem', position: 'relative' }}>
           <span style={{ 
             display: 'inline-flex',
             alignItems: 'center',
@@ -194,12 +198,37 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
             
             {/* Features */}
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '16px' }}>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#fff' }}>✨ Key Features</h3>
+            {/* Features */}
+            <div 
+              style={{ 
+                background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+                border: '1px solid rgba(255,255,255,0.1)', 
+                borderTop: '1px solid rgba(255,255,255,0.2)',
+                borderLeft: '1px solid rgba(255,255,255,0.2)',
+                padding: '2.5rem', 
+                borderRadius: '24px',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05)'
+              }}
+              onMouseEnter={(e) => { 
+                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.3)';
+                e.currentTarget.style.boxShadow = '0 25px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1)';
+              }}
+              onMouseLeave={(e) => { 
+                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)';
+                e.currentTarget.style.borderTop = '1px solid rgba(255,255,255,0.2)';
+                e.currentTarget.style.borderLeft = '1px solid rgba(255,255,255,0.2)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05)';
+              }}
+            >
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '1.8rem' }}>✨</span> Key Features
+              </h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {review.features?.map((feat: string, i: number) => (
-                  <li key={i} style={{ marginBottom: '1rem', color: '#bbb', paddingLeft: '1.5rem', position: 'relative' }}>
-                    <span style={{ position: 'absolute', left: 0, color: 'var(--accent)' }}>•</span>
+                  <li key={i} style={{ marginBottom: '1rem', color: '#ccc', paddingLeft: '2rem', position: 'relative', lineHeight: '1.6' }}>
+                    <span style={{ position: 'absolute', left: 0, top: '2px', color: 'var(--accent)', fontSize: '1.2rem' }}>•</span>
                     {feat}
                   </li>
                 ))}
@@ -207,21 +236,49 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             </div>
 
             {/* Pros & Cons */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '2rem', borderRadius: '16px' }}>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#10b981' }}>👍 Pros</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ 
+                background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.02) 100%)', 
+                border: '1px solid rgba(16, 185, 129, 0.2)', 
+                borderTop: '1px solid rgba(16, 185, 129, 0.4)',
+                borderLeft: '1px solid rgba(16, 185, 129, 0.4)',
+                padding: '2rem', 
+                borderRadius: '24px',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 15px 30px rgba(0,0,0,0.2)'
+              }}>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>👍</span> Pros
+                </h3>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {review.pros?.map((pro: string, i: number) => (
-                    <li key={i} style={{ marginBottom: '0.8rem', color: '#bbb' }}>✓ {pro}</li>
+                    <li key={i} style={{ marginBottom: '0.8rem', color: '#e2e8f0', display: 'flex', gap: '10px' }}>
+                      <span style={{ color: '#10b981', fontWeight: 'bold' }}>✓</span> <span>{pro}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
 
-              <div style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '2rem', borderRadius: '16px' }}>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ef4444' }}>👎 Cons</h3>
+              <div style={{ 
+                background: 'linear-gradient(145deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.02) 100%)', 
+                border: '1px solid rgba(239, 68, 68, 0.2)', 
+                borderTop: '1px solid rgba(239, 68, 68, 0.4)',
+                borderLeft: '1px solid rgba(239, 68, 68, 0.4)',
+                padding: '2rem', 
+                borderRadius: '24px',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 15px 30px rgba(0,0,0,0.2)'
+              }}>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>👎</span> Cons
+                </h3>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {review.cons?.map((con: string, i: number) => (
-                    <li key={i} style={{ marginBottom: '0.8rem', color: '#bbb' }}>✕ {con}</li>
+                    <li key={i} style={{ marginBottom: '0.8rem', color: '#e2e8f0', display: 'flex', gap: '10px' }}>
+                      <span style={{ color: '#ef4444', fontWeight: 'bold' }}>✕</span> <span>{con}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -230,10 +287,15 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           </div>
         )}
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem', background: 'rgba(0,0,0,0.3)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ 
+          display: 'flex', alignItems: 'center', gap: '2rem', padding: '2.5rem', 
+          background: 'rgba(255,255,255,0.02)', borderRadius: '24px', 
+          border: '1px solid rgba(16, 185, 129, 0.3)', backdropFilter: 'blur(10px)',
+          boxShadow: '0 0 30px rgba(16, 185, 129, 0.1)'
+        }}>
           <div>
             <span style={{ display: 'block', fontSize: '0.9rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Pricing</span>
-            <strong style={{ fontSize: '1.5rem', color: '#fff' }}>{review?.pricing || 'Visit website for pricing'}</strong>
+            <strong style={{ fontSize: '1.8rem', color: '#fff' }}>{review?.pricing || 'Visit website for pricing'}</strong>
           </div>
           <a 
             href={tool.affiliate_link} 
@@ -241,25 +303,34 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             rel="noopener noreferrer" 
             style={{
               display: 'inline-block',
-              background: 'linear-gradient(45deg, var(--accent), #10b981)',
+              background: 'linear-gradient(135deg, var(--accent), #059669)',
               color: 'var(--bg)',
               padding: '20px 40px',
-              borderRadius: '12px',
+              borderRadius: '50px',
               textDecoration: 'none',
               fontWeight: 'bold',
               fontSize: '1.2rem',
-              transition: 'transform 0.2s ease',
-              marginLeft: 'auto'
+              transition: 'all 0.3s ease',
+              marginLeft: 'auto',
+              boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 15px 35px rgba(16, 185, 129, 0.6)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 25px rgba(16, 185, 129, 0.4)';
             }}
           >
             Go to {tool.name} &rarr;
           </a>
         </div>
 
-        {/* Related Tools for Internal Linking (SEO) */}
+        {/* Related Tools for Internal Linking (SEO) / Alternatives */}
         {relatedTools.length > 0 && (
           <div style={{ marginTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem' }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Related {tool.category} Tools</h3>
+            <h3 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Alternatives to {tool.name}</h3>
             <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
               {relatedTools.map((rt) => (
                 <Link 
@@ -267,7 +338,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
                   href={`/tool/${rt.slug || rt.name.toLowerCase().replace(/\\s+/g, '-')}`}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s' }}>
+                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s', position: 'relative' }}>
                     <span style={{ 
                       fontSize: '0.75rem', 
                       textTransform: 'uppercase', 
@@ -280,11 +351,29 @@ export default async function ToolPage({ params }: { params: { slug: string } })
                       background: 'rgba(255,255,255,0.05)',
                       padding: '4px 10px',
                       borderRadius: '12px',
-                      width: 'fit-content'
+                      width: 'fit-content',
+                      marginBottom: '1rem'
                     }}>
                       {rt.category}
                     </span>
-                    <h4 style={{ fontSize: '1.25rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>{rt.name}</h4>
+                    
+                    <span style={{
+                      position: 'absolute',
+                      top: '1.5rem',
+                      right: '1.5rem',
+                      background: (rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.1)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                      color: (rt.pricing || 'Freemium') === 'Free' ? '#10b981' : (rt.pricing || 'Freemium') === 'Paid' ? '#ef4444' : '#3b82f6',
+                      border: `1px solid ${(rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.3)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+                      fontSize: '0.7rem',
+                      fontWeight: 'bold',
+                      padding: '4px 8px',
+                      borderRadius: '8px',
+                      textTransform: 'uppercase'
+                    }}>
+                      {rt.pricing || 'Freemium'}
+                    </span>
+                    
+                    <h4 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{rt.name}</h4>
                     <p style={{ fontSize: '0.9rem', color: '#888', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rt.description}</p>
                   </div>
                 </Link>
