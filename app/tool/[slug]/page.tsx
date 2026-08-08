@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!tool) {
     const { data: allTools } = await supabase.from('tools').select('name, description');
     if (allTools) {
-      tool = allTools.find(t => t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+      tool = allTools.find(t => t.name && t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
     }
   }
 
@@ -62,7 +62,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
   if (!tool) {
     const { data: allTools } = await supabase.from('tools').select('*');
     if (allTools) {
-      tool = allTools.find(t => t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+      tool = allTools.find(t => t.name && t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
     }
   }
 
@@ -79,15 +79,25 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     );
   }
 
-  const review = tool.review_data || null;
+  // Fetch deep review data
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('tool_id', tool.id)
+    .limit(1);
+  
+  const review = reviews?.[0];
 
-  // Fetch related tools in the same category
-  const { data: relatedToolsDb } = await supabase
-    .from('tools')
-    .select('id, name, slug, description, category')
-    .eq('category', tool.category)
-    .neq('slug', tool.slug)
-    .limit(3);
+  let relatedToolsDb = null;
+  if (tool.category) {
+    const res = await supabase
+      .from('tools')
+      .select('id, name, slug, description, category, pricing')
+      .eq('category', tool.category)
+      .neq('slug', tool.slug)
+      .limit(3);
+    relatedToolsDb = res.data;
+  }
 
   const relatedTools = relatedToolsDb || [];
 
