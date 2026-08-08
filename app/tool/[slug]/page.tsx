@@ -332,7 +332,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           <div style={{ marginTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '3rem' }}>
             <h3 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Alternatives to {tool.name}</h3>
             <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
-              {relatedTools.map((rt) => (
+              {relatedTools.map((rt: any) => (
                 <Link 
                   key={rt.id} 
                   href={`/tool/${rt.slug || rt.name.toLowerCase().replace(/\\s+/g, '-')}`}
