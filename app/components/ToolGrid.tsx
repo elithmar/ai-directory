@@ -99,41 +99,42 @@ export default function ToolGrid({
             {index === 4 && (
                <div style={{ position: 'absolute', top: '-12px', right: '-12px', background: 'linear-gradient(90deg, #8b5cf6, #d946ef)', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '6px 12px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.5)', textTransform: 'uppercase', letterSpacing: '1px', zIndex: 10, transform: 'rotate(-4deg)' }}>💎 Hidden Gem</div>
             )}
-            {tool.category && (
-              <span style={{ 
-                fontSize: '0.75rem', 
-                textTransform: 'uppercase', 
-                color: 'var(--accent)', 
-                fontWeight: 'bold', 
-                letterSpacing: '1px',
+            {/* Badges Container */}
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+              {tool.category && (
+                <span style={{ 
+                  fontSize: '0.75rem', 
+                  textTransform: 'uppercase', 
+                  color: 'var(--accent)', 
+                  fontWeight: 'bold', 
+                  letterSpacing: '1px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'rgba(255,255,255,0.05)',
+                  padding: '4px 10px',
+                  borderRadius: '12px'
+                }}>
+                  <span style={{ fontSize: '1rem' }}>{getCategoryIcon(tool.category)}</span> {tool.category}
+                </span>
+              )}
+              
+              <span style={{
+                background: (tool.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.1)' : (tool.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                color: (tool.pricing || 'Freemium') === 'Free' ? '#10b981' : (tool.pricing || 'Freemium') === 'Paid' ? '#ef4444' : '#3b82f6',
+                border: `1px solid ${(tool.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.3)' : (tool.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                padding: '4px 8px',
+                borderRadius: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
                 display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'rgba(255,255,255,0.05)',
-                padding: '4px 10px',
-                borderRadius: '12px',
-                width: 'fit-content'
+                alignItems: 'center'
               }}>
-                <span style={{ fontSize: '1rem' }}>{getCategoryIcon(tool.category)}</span> {tool.category}
+                {tool.pricing || 'Freemium'}
               </span>
-            )}
-            
-            <span style={{
-              position: 'absolute',
-              top: '12px',
-              left: '12px',
-              background: (tool.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.1)' : (tool.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-              color: (tool.pricing || 'Freemium') === 'Free' ? '#10b981' : (tool.pricing || 'Freemium') === 'Paid' ? '#ef4444' : '#3b82f6',
-              border: `1px solid ${(tool.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.3)' : (tool.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
-              fontSize: '0.7rem',
-              fontWeight: 'bold',
-              padding: '4px 8px',
-              borderRadius: '8px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>
-              {tool.pricing || 'Freemium'}
-            </span>
+            </div>
             <h2 className="card-title" style={{ marginTop: '0.5rem' }}>{tool.name}</h2>
             <p className="card-description">{tool.description}</p>
             <Link 
