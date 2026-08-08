@@ -93,11 +93,11 @@ export default function ToolGrid({
       <div className="grid">
         {tools.map((tool, index) => (
           <article key={tool.id || tool.name} className="card" style={{ position: 'relative' }}>
-            {index === 1 && (
-               <div style={{ position: 'absolute', top: '-12px', right: '-12px', background: 'linear-gradient(90deg, #ef4444, #f97316)', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '6px 12px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.5)', textTransform: 'uppercase', letterSpacing: '1px', zIndex: 10, transform: 'rotate(4deg)' }}>🔥 Trending</div>
+            {index === 0 && !searchQuery && !categoryQuery && (
+               <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'linear-gradient(90deg, #ff8a00, #e52e71)', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '6px 12px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(229, 46, 113, 0.5)', textTransform: 'uppercase', letterSpacing: '1px', zIndex: 10, transform: 'rotate(4deg)' }}>🔥 Trending</div>
             )}
             {index === 4 && (
-               <div style={{ position: 'absolute', top: '-12px', right: '-12px', background: 'linear-gradient(90deg, #8b5cf6, #d946ef)', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '6px 12px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.5)', textTransform: 'uppercase', letterSpacing: '1px', zIndex: 10, transform: 'rotate(-4deg)' }}>💎 Hidden Gem</div>
+               <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'linear-gradient(90deg, #8b5cf6, #d946ef)', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '6px 12px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.5)', textTransform: 'uppercase', letterSpacing: '1px', zIndex: 10, transform: 'rotate(-4deg)' }}>💎 Hidden Gem</div>
             )}
             {/* Badges Container */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
