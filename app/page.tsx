@@ -35,6 +35,36 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         <p className="hero-p">Discover the ultimate directory of high-leverage AI tools, curated programmatically.</p>
         
 
+        {/* CTA Button for Audit */}
+        <div style={{ marginTop: '2rem', marginBottom: '3rem', textAlign: 'center' }}>
+          <Link href="/auditor" style={{
+            display: 'inline-block',
+            padding: '16px 40px',
+            background: 'linear-gradient(135deg, #10b981, #34d399)',
+            color: '#000',
+            fontWeight: '900',
+            fontSize: '1.2rem',
+            borderRadius: '50px',
+            textDecoration: 'none',
+            textTransform: 'uppercase',
+            letterSpacing: '1px',
+            boxShadow: '0 10px 30px rgba(16, 185, 129, 0.4)',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+          }}
+          className="btn-hover"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 15px 40px rgba(16, 185, 129, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.4)';
+          }}
+          >
+            🎯 Take the Free AI Stack Audit
+          </Link>
+        </div>
+
         {/* Interactive Search & Filter Client Component */}
         <SearchAndFilter tools={dbTools || []} initialQuery={searchParams.q} initialCategory={searchParams.category} />
       </section>
