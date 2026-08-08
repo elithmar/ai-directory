@@ -52,14 +52,6 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
           className="btn-hover"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-3px)';
-            e.currentTarget.style.boxShadow = '0 15px 40px rgba(16, 185, 129, 0.6)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.4)';
-          }}
           >
             🎯 Take the Free AI Stack Audit
           </Link>
