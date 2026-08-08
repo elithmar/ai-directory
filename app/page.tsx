@@ -10,7 +10,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default async function Home({ searchParams }: { searchParams: { q?: string; category?: string } }) {
+export default async function Home({ searchParams }: { searchParams: { q?: string; category?: string; pricing?: string } }) {
   let query = supabase.from('tools').select('*').order('created_at', { ascending: false });
 
   if (searchParams.q) {
@@ -21,11 +21,16 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
   }
 
   // Límite de 7: 1 para Featured Tool + 6 para el Grid inicial
-  query = query.limit(7);
+  query = query.limit(30); // Aumentamos límite para que el filtro en memoria tenga resultados
 
   const { data: dbTools } = await query;
 
-  const tools = dbTools || [];
+  let tools = dbTools || [];
+  
+  if (searchParams.pricing) {
+    tools = tools.filter(t => (t.pricing || 'Freemium') === searchParams.pricing);
+  }
+  
   const featuredTool = tools[0];
 
   return (
@@ -58,7 +63,7 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
         </div>
 
         {/* Interactive Search & Filter Client Component */}
-        <SearchAndFilter tools={dbTools || []} initialQuery={searchParams.q} initialCategory={searchParams.category} />
+        <SearchAndFilter tools={dbTools || []} initialQuery={searchParams.q} initialCategory={searchParams.category} initialPricing={searchParams.pricing} />
       </section>
 
       {/* Featured Section */}
@@ -88,9 +93,10 @@ export default async function Home({ searchParams }: { searchParams: { q?: strin
 
       {/* Grid with Load More Pagination */}
       <ToolGrid 
-        initialTools={searchParams.q || searchParams.category ? tools : tools.slice(1)} 
+        initialTools={searchParams.q || searchParams.category || searchParams.pricing ? tools : tools.slice(1)} 
         searchQuery={searchParams.q} 
         categoryQuery={searchParams.category} 
+        pricingQuery={searchParams.pricing}
       />
     </main>
   );
