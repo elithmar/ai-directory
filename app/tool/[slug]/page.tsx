@@ -219,16 +219,6 @@ export default async function ToolPage({ params }: { params: { slug: string } })
                 WebkitBackdropFilter: 'blur(20px)',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05)'
               }}
-              onMouseEnter={(e) => { 
-                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.3)';
-                e.currentTarget.style.boxShadow = '0 25px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1)';
-              }}
-              onMouseLeave={(e) => { 
-                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.1)';
-                e.currentTarget.style.borderTop = '1px solid rgba(255,255,255,0.2)';
-                e.currentTarget.style.borderLeft = '1px solid rgba(255,255,255,0.2)';
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05)';
-              }}
             >
               <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '1.8rem' }}>✨</span> Key Features
@@ -321,14 +311,6 @@ export default async function ToolPage({ params }: { params: { slug: string } })
               transition: 'all 0.3s ease',
               marginLeft: 'auto',
               boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 15px 35px rgba(16, 185, 129, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 25px rgba(16, 185, 129, 0.4)';
             }}
           >
             Go to {tool.name} &rarr;
