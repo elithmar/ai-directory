@@ -19,45 +19,50 @@ const fallbackTools = [
 import { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { data: tools } = await supabase
-    .from('tools')
-    .select('name, description')
-    .eq('slug', params.slug)
-    .limit(1);
+  try {
+    const { data: tools } = await supabase
+      .from('tools')
+      .select('name, description')
+      .eq('slug', params.slug)
+      .limit(1);
 
-  let tool = tools?.[0];
+    let tool = tools?.[0];
 
-  if (!tool) {
-    const { data: allTools } = await supabase.from('tools').select('name, description');
-    if (allTools) {
-      tool = allTools.find(t => t.name && t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+    if (!tool) {
+      const { data: allTools } = await supabase.from('tools').select('name, description');
+      if (allTools) {
+        tool = allTools.find(t => t.name && t.name.toLowerCase().replace(/\s+/g, '-') === params.slug);
+      }
     }
-  }
 
-  if (!tool) {
-    tool = fallbackTools.find(t => t.slug === params.slug);
-  }
+    if (!tool) {
+      tool = fallbackTools.find(t => t.slug === params.slug);
+    }
 
-  if (!tool) {
+    if (!tool) {
+      return {
+        title: 'Tool Not Found | Curated AI List',
+      };
+    }
+
     return {
-      title: 'Tool Not Found | Curated AI List',
+      title: `${tool.name} Review 2026 - Pros, Cons & Pricing | Curated AI List`,
+      description: tool.description,
     };
+  } catch (error: any) {
+    return { title: 'Error generating metadata' };
   }
-
-  return {
-    title: `${tool.name} Review 2026 - Pros, Cons & Pricing | Curated AI List`,
-    description: tool.description,
-  };
 }
 
 export default async function ToolPage({ params }: { params: { slug: string } }) {
-  const { data: tools } = await supabase
-    .from('tools')
-    .select('*')
-    .eq('slug', params.slug)
-    .limit(1);
+  try {
+    const { data: tools } = await supabase
+      .from('tools')
+      .select('*')
+      .eq('slug', params.slug)
+      .limit(1);
 
-  let tool = tools?.[0];
+    let tool = tools?.[0];
 
   if (!tool) {
     const { data: allTools } = await supabase.from('tools').select('*');
@@ -386,5 +391,15 @@ export default async function ToolPage({ params }: { params: { slug: string } })
         )}
       </article>
     </main>
-  );
+    );
+  } catch (e: any) {
+    return (
+      <main className="container" style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
+        <h1>Application Error</h1>
+        <pre style={{ whiteSpace: 'pre-wrap', textAlign: 'left', background: '#222', padding: '1rem' }}>
+          {e.message}{"\n"}{e.stack}
+        </pre>
+      </main>
+    );
+  }
 }
