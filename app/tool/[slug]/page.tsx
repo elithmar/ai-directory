@@ -339,39 +339,39 @@ export default async function ToolPage({ params }: { params: { slug: string } })
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s', position: 'relative' }}>
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      textTransform: 'uppercase', 
-                      color: 'var(--accent)', 
-                      fontWeight: 'bold', 
-                      letterSpacing: '1px',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: 'rgba(255,255,255,0.05)',
-                      padding: '4px 10px',
-                      borderRadius: '12px',
-                      width: 'fit-content',
-                      marginBottom: '1rem'
-                    }}>
-                      {rt.category}
-                    </span>
-                    
-                    <span style={{
-                      position: 'absolute',
-                      top: '1.5rem',
-                      right: '1.5rem',
-                      background: (rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.1)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-                      color: (rt.pricing || 'Freemium') === 'Free' ? '#10b981' : (rt.pricing || 'Freemium') === 'Paid' ? '#ef4444' : '#3b82f6',
-                      border: `1px solid ${(rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.3)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      padding: '4px 8px',
-                      borderRadius: '8px',
-                      textTransform: 'uppercase'
-                    }}>
-                      {rt.pricing || 'Freemium'}
-                    </span>
+                    {/* Badges Container */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                      <span style={{ 
+                        fontSize: '0.75rem', 
+                        textTransform: 'uppercase', 
+                        color: 'var(--accent)', 
+                        fontWeight: 'bold', 
+                        letterSpacing: '1px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: 'rgba(255,255,255,0.05)',
+                        padding: '4px 10px',
+                        borderRadius: '12px'
+                      }}>
+                        {rt.category}
+                      </span>
+                      
+                      <span style={{
+                        background: (rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.1)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                        color: (rt.pricing || 'Freemium') === 'Free' ? '#10b981' : (rt.pricing || 'Freemium') === 'Paid' ? '#ef4444' : '#3b82f6',
+                        border: `1px solid ${(rt.pricing || 'Freemium') === 'Free' ? 'rgba(16, 185, 129, 0.3)' : (rt.pricing || 'Freemium') === 'Paid' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+                        fontSize: '0.7rem',
+                        fontWeight: 'bold',
+                        padding: '4px 8px',
+                        borderRadius: '8px',
+                        textTransform: 'uppercase',
+                        display: 'inline-flex',
+                        alignItems: 'center'
+                      }}>
+                        {rt.pricing || 'Freemium'}
+                      </span>
+                    </div>
                     
                     <h4 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{rt.name}</h4>
                     <p style={{ fontSize: '0.9rem', color: '#888', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rt.description}</p>
